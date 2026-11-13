@@ -1,0 +1,568 @@
+<!doctype html>
+<!--
+  KONCEPCJA 4 — „Faktura” (3D).
+  Pati maluje obrazy strukturalne — farba ma grubość i rzuca cień. Hero to płaszczyzna WebGL (three.js) z reliefem z mapy normalnych
+  wyliczonej w przeglądarce ze zdjęcia; ciepłe światło podąża za palcem/kursorem, a w spoczynku samo krąży jak boczne światło w pracowni.
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>skart — obrazy malowane ręcznie (koncepcja 4: Faktura 3D)</title>
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Italiana&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  color-scheme: light;
+  --umbra:#1d1712;
+  --cream:#f6ede3;
+  --cream-2:#efe2d3;
+  --sand:#e3d0ba;
+  --brown:#7a5638;
+  --brown-d:#4a3322;
+  --ink:#1a1512;
+  --line:rgba(74,51,34,.3);
+  --serif:"Cormorant Garamond","Cormorant",Georgia,"Times New Roman",serif;
+  --display:"Italiana","Cormorant Garamond",Georgia,serif;
+  --sans:"Jost","Helvetica Neue",Arial,sans-serif;
+  --script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
+  --gut:max(16px, env(safe-area-inset-left));
+  --gutr:max(16px, env(safe-area-inset-right));
+  --wrap:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px;-webkit-text-size-adjust:100%;background:var(--cream)}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:17px;line-height:1.7;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #e8b97e;outline-offset:3px}
+main :focus-visible,footer :focus-visible,.lb :focus-visible{outline-color:var(--brown)}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gut);padding-right:var(--gutr)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none;color:inherit}
+.logo .sk{font-family:var(--script);font-size:1.9em;margin-bottom:-.3em;position:relative;z-index:1;transform:translateX(-.05em)}
+.logo .art{font-family:var(--serif);font-weight:500;letter-spacing:.06em;font-size:1.9em;text-transform:uppercase}
+.logo.sm{font-size:15px}
+
+/* nagłówek nad hero */
+header.top{position:fixed;top:0;left:0;right:0;z-index:50;color:#fbf2e6;transition:background .3s,color .3s,box-shadow .3s}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+header.top.solid{background:rgba(246,237,227,.95);color:var(--ink);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 1px 0 var(--line)}
+header.top:not(.solid) .logo{opacity:0;pointer-events:none}
+nav.menu ul{list-style:none;margin:0;padding:0;display:flex;gap:40px}
+nav.menu a{font-family:var(--serif);font-size:20px;text-decoration:none;padding:8px 2px;position:relative;display:inline-block;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+header.top.solid nav.menu a{text-shadow:none}
+nav.menu a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform:scaleX(0);transition:transform .3s}
+nav.menu a:hover::after,nav.menu a.on::after{transform:scaleX(1)}
+.burger{display:none;width:46px;height:46px;background:none;border:0;cursor:pointer;position:relative}
+.burger span{position:absolute;left:11px;right:11px;height:1px;background:currentColor;transition:transform .3s,opacity .2s}
+.burger span:nth-child(1){top:16px}.burger span:nth-child(2){top:23px}.burger span:nth-child(3){top:30px}
+.burger[aria-expanded=true] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded=true] span:nth-child(2){opacity:0}
+.burger[aria-expanded=true] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* HERO */
+.hero{position:relative;height:100vh;height:100svh;min-height:480px;background:var(--umbra) url(img/praca-04.jpg) center/cover no-repeat;overflow:hidden;color:#fbf2e6;isolation:isolate}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;opacity:0;transition:opacity 1s;z-index:0}
+.hero.gl canvas{opacity:1}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(29,23,18,.28),rgba(29,23,18,.05) 55%,rgba(29,23,18,.35))}
+.hero .in{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:70px var(--gutr) 110px var(--gut);pointer-events:none}
+.hero .logo{font-size:clamp(34px,6vw,66px);text-shadow:0 2px 18px rgba(0,0,0,.65),0 0 2px rgba(0,0,0,.4)}
+.hero .logo .sk{font-size:2.3em;margin-bottom:-.38em}
+.hero .logo .art{font-size:2.3em;letter-spacing:.04em}
+.hero .motto{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(19px,2.6vw,29px);line-height:1.45;margin:30px auto 0;max-width:620px;text-shadow:0 2px 14px rgba(0,0,0,.75),0 0 3px rgba(0,0,0,.5)}
+.hero .hint{position:absolute;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom));z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.hero .hint p{margin:0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+.dots{display:flex;gap:2px;pointer-events:auto}
+.dots button{width:44px;height:44px;background:none;border:0;cursor:pointer;display:grid;place-items:center;border-radius:50%}
+.dots button i{display:block;width:11px;height:11px;border-radius:50%;border:1.5px solid #fbf2e6;background:transparent;box-shadow:0 1px 6px rgba(0,0,0,.5);transition:background .3s,transform .3s}
+.dots button[aria-current=true] i{background:#fbf2e6;transform:scale(1.15)}
+.hero .cap{font-size:12px;letter-spacing:.12em;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+
+/* sekcje */
+section{padding:clamp(64px,10vw,120px) 0}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,5vw,56px);line-height:1.1;margin:0 0 .5em;letter-spacing:.02em}
+.eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--brown);margin:0 0 14px;font-weight:400}
+
+.about .grid{display:grid;grid-template-columns:5fr 6fr;gap:clamp(28px,6vw,90px);align-items:center}
+.about .pic{position:relative}
+.about .pic img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.about .pic::after{content:"";position:absolute;inset:14px -14px -14px 14px;border:1px solid var(--line);z-index:-1}
+.about p.lead{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);line-height:1.5;margin:0 0 1em;font-weight:500}
+.about p{margin:0 0 1em}
+.sign{font-family:var(--script);font-size:34px;color:var(--brown-d);margin-top:10px}
+
+/* galeria */
+.gallery{background:var(--cream-2)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 28px}
+.filters button{min-height:44px;padding:0 22px;border:1px solid var(--line);background:transparent;border-radius:999px;cursor:pointer;font-size:14px;letter-spacing:.1em}
+.filters button[aria-pressed=true]{background:var(--brown-d);color:var(--cream);border-color:var(--brown-d)}
+.grid-g{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,22px)}
+.tile{position:relative;padding:0;border:0;background:var(--sand);cursor:zoom-in;aspect-ratio:4/5;overflow:hidden;display:block;text-align:left}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.tile:hover img{transform:scale(1.04)}
+.tile .t{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 12px;color:#fff;font-family:var(--serif);font-size:19px;line-height:1.2;background:linear-gradient(transparent,rgba(26,21,18,.7))}
+.tile .t small{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.1em;opacity:.85;margin-top:3px}
+
+/* z bliska */
+.close{background:var(--umbra);color:#f3e7d8;padding-bottom:clamp(48px,8vw,100px)}
+.close .eyebrow{color:#d9b48a}
+.close .intro{max-width:560px;margin:0 0 40px;opacity:.9}
+.mac{position:relative;margin:0 0 clamp(14px,2vw,24px);overflow:hidden;height:clamp(300px,52vw,620px);background:#2a2119}
+.mac img{width:100%;height:100%;object-fit:cover;transform:scale(1.6);transform-origin:var(--ox,50%) var(--oy,50%);transition:transform 1.2s ease}
+.mac:hover img{transform:scale(1.9)}
+.mac figcaption{position:absolute;left:0;bottom:0;padding:40px 18px 14px;right:0;font-size:13px;letter-spacing:.1em;background:linear-gradient(transparent,rgba(0,0,0,.65));color:#fbf2e6}
+.mac figcaption b{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:0;display:block}
+.macgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,24px)}
+.macgrid .mac{margin:0}
+
+/* proces */
+.steps{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,32px)}
+.steps li img{width:100%;aspect-ratio:4/5;object-fit:cover;margin-bottom:16px}
+.steps .n{font-family:var(--display);font-size:38px;line-height:1;color:var(--brown)}
+.steps h3{font-family:var(--serif);font-weight:500;font-size:25px;margin:6px 0 6px}
+.steps p{margin:0;font-size:16px}
+
+/* kontakt */
+.contact{background:var(--cream-2)}
+.contact .grid{display:grid;grid-template-columns:5fr 6fr;gap:clamp(28px,6vw,90px)}
+.contact .lead{font-family:var(--serif);font-size:clamp(22px,2.6vw,29px);line-height:1.5;font-weight:500;margin:0 0 24px}
+.contact dl{margin:0}.contact dt{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--brown);margin-top:16px}
+.contact dd{margin:2px 0 0;font-size:19px;-webkit-user-select:all;user-select:all}
+form label{display:block;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brown-d);margin:0 0 6px}
+form .f{margin-bottom:18px}
+form input,form textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid var(--line);background:#fbf5ec;color:var(--ink);border-radius:0;min-height:48px}
+form textarea{min-height:140px;resize:vertical}
+form button{min-height:48px;padding:0 36px;border:0;background:var(--brown-d);color:var(--cream);letter-spacing:.2em;text-transform:uppercase;font-size:13px;cursor:pointer}
+form button:hover{background:var(--ink)}
+.note{margin-top:16px;padding:12px 14px;border-left:2px solid var(--brown);background:#fbf5ec;font-size:15px}
+.note[hidden]{display:none}
+
+footer{background:var(--ink);color:#d9c8b3;padding:46px 0 calc(34px + env(safe-area-inset-bottom));text-align:left}
+footer .wrap{display:flex;flex-wrap:wrap;gap:18px 40px;align-items:center;justify-content:space-between}
+footer small{display:block;font-size:13px;opacity:.75}
+footer a{font-size:13px;letter-spacing:.08em}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(20,15,11,.95);display:none;flex-direction:column;align-items:center;justify-content:center;padding:56px var(--gutr) 20px var(--gut);color:#f3e7d8;touch-action:pan-y}
+.lb.open{display:flex}
+.lb img{max-height:calc(100svh - 190px);max-height:calc(100dvh - 190px);max-width:100%;object-fit:contain;box-shadow:0 10px 50px rgba(0,0,0,.6)}
+.lb .meta{margin-top:16px;text-align:center}
+.lb .meta b{font-family:var(--serif);font-size:26px;font-weight:500;display:block}
+.lb .meta span{font-size:14px;letter-spacing:.06em;opacity:.85}
+.lb button{position:absolute;background:none;border:0;color:#f3e7d8;cursor:pointer;width:48px;height:48px;font-size:34px;line-height:1;display:grid;place-items:center}
+.lb .x{top:calc(6px + env(safe-area-inset-top));right:8px}
+.lb .pv{left:4px;top:50%;margin-top:-24px}.lb .nx{right:4px;top:50%;margin-top:-24px}
+
+@media (max-width:860px){
+  nav.menu{position:fixed;left:0;right:0;top:64px;background:rgba(246,237,227,.98);color:var(--ink);padding:8px var(--gutr) 16px var(--gut);display:none;box-shadow:0 12px 24px rgba(0,0,0,.15)}
+  nav.menu.open{display:block}
+  nav.menu ul{flex-direction:column;gap:0}
+  nav.menu a{display:block;padding:14px 2px;border-bottom:1px solid var(--line);text-shadow:none;font-size:22px}
+  .burger{display:block}
+  header.top:not(.solid) .logo{opacity:0}
+  header.top.menu-open{background:rgba(246,237,227,.98);color:var(--ink)}
+  header.top.menu-open .logo{opacity:1;pointer-events:auto}
+  .about .grid,.contact .grid{grid-template-columns:1fr}
+  .about .pic{max-width:420px}
+  .grid-g{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:1fr 1fr}
+  .macgrid{grid-template-columns:1fr}
+  .lb .pv,.lb .nx{top:auto;bottom:10px;margin:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+  .mac img{transform:scale(1.4)}
+}
+</style>
+</head>
+<body>
+<header class="top" id="hdr">
+  <div class="wrap">
+    <a class="logo sm" href="#top" aria-label="skart — do góry"><span class="sk">sk</span><span class="art">Art</span></a>
+    <nav class="menu" id="menu" aria-label="Menu główne">
+      <ul>
+        <li><a href="#o-mnie">O mnie</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#proces">Proces twórczy</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero" id="hero">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="in">
+    <div class="logo" role="img" aria-label="skart"><span class="sk">sk</span><span class="art">Art</span></div>
+    <p class="motto">Nie każda historia wymaga słów.<br>Niektóre znajdują swój wyraz w sztuce.</p>
+  </div>
+  <div class="hint">
+    <p>Przesuń palcem — zobacz fakturę</p>
+    <div class="dots" role="group" aria-label="Zmień obraz w tle">
+      <button type="button" data-i="0" aria-current="true" aria-label="Len — biały relief"><i></i></button>
+      <button type="button" data-i="1" aria-label="Ochra"><i></i></button>
+      <button type="button" data-i="2" aria-label="Biel"><i></i></button>
+    </div>
+    <div class="cap" id="cap">Len · pasta strukturalna, akryl</div>
+  </div>
+</div>
+
+<section class="about" id="o-mnie">
+  <div class="wrap grid">
+    <div class="pic"><img src="img/proces-05-pracownia.jpg" alt="Pracownia malarki — płótna i narzędzia w jasnym świetle" loading="lazy"></div>
+    <div>
+      <p class="eyebrow">O mnie</p>
+      <h2>Obrazy, które chce się dotknąć</h2>
+      <p class="lead">Maluję obrazy, które chce się dotknąć.</p>
+      <p>Pracuję szpachlą i pędzlem, warstwa po warstwie, aż farba zacznie rzucać własny cień. Tworzę obrazy strukturalne i klasyczne płótna — pejzaże, abstrakcje, światło. Każdy powstaje ręcznie, w jednym egzemplarzu.</p>
+      <div class="sign">— Patrycja</div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="galeria">
+  <div class="wrap">
+    <p class="eyebrow">Galeria</p>
+    <h2>Prace</h2>
+    <div class="filters" role="group" aria-label="Filtr galerii">
+      <button type="button" data-f="all" aria-pressed="true">Wszystkie</button>
+      <button type="button" data-f="s" aria-pressed="false">Strukturalne</button>
+      <button type="button" data-f="m" aria-pressed="false">Malowane</button>
+    </div>
+    <div class="grid-g" id="grid"></div>
+  </div>
+</section>
+
+<section class="close" id="z-bliska">
+  <div class="wrap">
+    <p class="eyebrow">Z bliska</p>
+    <h2>Farba ma grubość</h2>
+    <p class="intro">Zbliżenia trzech prac. Dopiero z bliska widać, jak szpachla zostawia grzbiety, a pasta — miękkie fale, w których zbiera się cień.</p>
+    <figure class="mac" style="--ox:30%;--oy:35%"><img src="img/praca-13.jpg" alt="Makro: biały relief z gipsu akrylowego, ostre grzbiety i cień" loading="lazy"><figcaption><b>Biel</b>gips akrylowy, relief</figcaption></figure>
+    <div class="macgrid">
+      <figure class="mac" style="--ox:60%;--oy:60%"><img src="img/praca-09.jpg" alt="Makro: gliniana faktura wykonana szpachlą" loading="lazy"><figcaption><b>Jesień w glinie</b>olej, szpachla</figcaption></figure>
+      <figure class="mac" style="--ox:45%;--oy:30%"><img src="img/praca-11.jpg" alt="Makro: pastelowa pasta strukturalna w miękkich falach" loading="lazy"><figcaption><b>Pastel</b>pasta strukturalna, akryl</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="proces">
+  <div class="wrap">
+    <p class="eyebrow">Proces twórczy</p>
+    <h2>Cztery kroki do obrazu</h2>
+    <ol class="steps">
+      <li><img src="img/proces-01-plotno.jpg" alt="Czyste płótno przygotowane do pracy" loading="lazy"><div class="n">1</div><h3>Płótno</h3><p>Zaczynam od czystego płótna i szkicu w głowie, rzadko na papierze.</p></li>
+      <li><img src="img/proces-02-szpachle.jpg" alt="Szpachle i narzędzia malarskie" loading="lazy"><div class="n">2</div><h3>Narzędzia</h3><p>Szpachle, pędzle, pasta strukturalna. Każde narzędzie zostawia inny ślad.</p></li>
+      <li><img src="img/proces-03-farba.jpg" alt="Gruba warstwa farby na płótnie" loading="lazy"><div class="n">3</div><h3>Warstwy</h3><p>Nakładam farbę grubo, warstwa po warstwie. Część musi schnąć kilka dni.</p></li>
+      <li><img src="img/proces-04-sztaluga.jpg" alt="Obraz na sztaludze w bocznym świetle" loading="lazy"><div class="n">4</div><h3>Światło</h3><p>Na końcu sprawdzam obraz w bocznym świetle — dopiero wtedy widać fakturę.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="contact" id="kontakt">
+  <div class="wrap grid">
+    <div>
+      <p class="eyebrow">Kontakt</p>
+      <h2>Napisz</h2>
+      <p class="lead">Chcesz zapytać o obraz albo zamówić pracę na wymiar? Napisz.</p>
+      <dl><dt>E-mail</dt><dd>kontakt@skart.pl</dd><dt>Instagram</dt><dd>@skart.art</dd></dl>
+    </div>
+    <form id="form" novalidate>
+      <div class="f"><label for="fn">Imię</label><input id="fn" name="imie" autocomplete="name"></div>
+      <div class="f"><label for="fe">E-mail</label><input id="fe" name="email" type="email" autocomplete="email" inputmode="email"></div>
+      <div class="f"><label for="fm">Wiadomość</label><textarea id="fm" name="wiadomosc"></textarea></div>
+      <button type="submit">Wyślij</button>
+      <div class="note" id="note" role="status" hidden>To makieta — formularz zacznie działać na prawdziwej stronie.</div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo sm" href="#top" aria-label="Do góry" style="color:#f3e7d8"><span class="sk">sk</span><span class="art">Art</span></a>
+    <div><small>© 2026 skart · Wszystkie obrazy malowane ręcznie</small><small>Zdjęcia w makiecie: Unsplash (zastępcze)</small></div>
+    <a href="index.html">← Wszystkie koncepcje</a>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Podgląd pracy" aria-hidden="true">
+  <button class="x" type="button" aria-label="Zamknij">×</button>
+  <button class="pv" type="button" aria-label="Poprzednia praca">‹</button>
+  <img id="lbimg" alt="">
+  <button class="nx" type="button" aria-label="Następna praca">›</button>
+  <div class="meta"><b id="lbt"></b><span id="lbm"></span></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- dane ---------- */
+var W=[
+ ['praca-01','Szum','akryl, pasta strukturalna, płótno','80×80 cm',2025,'s'],
+ ['praca-02','Szron','akryl, szpachla, płótno','60×80 cm',2025,'s'],
+ ['praca-03','Zapiski','olej, płótno','50×70 cm',2024,'m'],
+ ['praca-04','Len','pasta strukturalna, akryl','60×90 cm',2025,'s'],
+ ['praca-05','Krata','technika mieszana','70×100 cm',2024,'s'],
+ ['praca-06','Odwilż','akryl, szpachla','100×80 cm',2025,'s'],
+ ['praca-07','Brzeg','akryl, pasta strukturalna','120×80 cm',2025,'s'],
+ ['praca-09','Jesień w glinie','olej, szpachla','80×60 cm',2024,'s'],
+ ['praca-10','Ochra','olej, szpachla','80×60 cm',2024,'s'],
+ ['praca-11','Pastel','pasta strukturalna, akryl','40×60 cm',2025,'s'],
+ ['praca-13','Biel','gips akrylowy, relief','50×90 cm',2025,'s'],
+ ['praca-14','Żar','olej, szpachla','90×60 cm',2024,'s'],
+ ['gory-01','Jezioro pod szczytem','olej, płótno','100×70 cm',2023,'m'],
+ ['gory-02','Dolina','olej, płótno','100×70 cm',2023,'m']
+];
+var ALT={'praca-01':'abstrakcyjna faktura w szarościach','praca-02':'jasny, oszroniony relief szpachlą','praca-03':'obraz olejny z pismem','praca-04':'biało-beżowy relief z pasty','praca-05':'obraz w kratę, technika mieszana','praca-06':'rozlana, topniejąca biel','praca-07':'szeroki, poziomy relief','praca-09':'gliniane, jesienne barwy szpachlą','praca-10':'ochrowy obraz olejny','praca-11':'pastelowa pasta strukturalna','praca-13':'biały relief z gipsu akrylowego','praca-14':'czerwono-pomarańczowy żar','gory-01':'górskie jezioro pod szczytem','gory-02':'górska dolina'};
+
+/* ---------- menu / nagłówek ---------- */
+var hdr=$('#hdr'),menu=$('#menu'),burger=$('#burger'),hero=$('#hero');
+function setMenu(o){menu.classList.toggle('open',o);burger.setAttribute('aria-expanded',o);hdr.classList.toggle('menu-open',o)}
+burger.addEventListener('click',function(){setMenu(!menu.classList.contains('open'))});
+menu.addEventListener('click',function(e){if(e.target.tagName==='A')setMenu(false)});
+function onScroll(){hdr.classList.toggle('solid',window.scrollY>hero.offsetHeight-90)}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ---------- galeria ---------- */
+var grid=$('#grid'),cur=[],idx=0;
+W.forEach(function(w,i){
+  var b=document.createElement('button');b.type='button';b.className='tile';b.dataset.c=w[5];b.dataset.i=i;
+  b.setAttribute('aria-label',w[1]+', '+w[2]+', '+w[3]+', '+w[4]);
+  b.innerHTML='<img loading="lazy" src="img/'+w[0]+'.jpg" alt="'+w[1]+' — '+ALT[w[0]]+'"><span class="t">'+w[1]+'<small>'+w[3]+' · '+w[4]+'</small></span>';
+  grid.appendChild(b);
+});
+var tiles=[].slice.call(grid.children);
+document.querySelectorAll('.filters button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.filters button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+    var f=b.dataset.f;tiles.forEach(function(t){t.hidden=!(f==='all'||t.dataset.c===f)});
+  });
+});
+var lb=$('#lb'),lbimg=$('#lbimg'),last=null;
+function vis(){return tiles.filter(function(t){return !t.hidden})}
+function show(k){
+  cur=vis();idx=(k+cur.length)%cur.length;var w=W[cur[idx].dataset.i];
+  lbimg.src='img/'+w[0]+'.jpg';lbimg.alt=w[1]+' — '+ALT[w[0]];
+  $('#lbt').textContent=w[1];$('#lbm').textContent=w[2]+' · '+w[3]+' · '+w[4];
+}
+function openLb(t){last=t;cur=vis();show(cur.indexOf(t));lb.classList.add('open');lb.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('.x',lb).focus()}
+function closeLb(){lb.classList.remove('open');lb.setAttribute('aria-hidden','true');document.body.style.overflow='';if(last)last.focus()}
+grid.addEventListener('click',function(e){var t=e.target.closest('.tile');if(t)openLb(t)});
+$('.x',lb).addEventListener('click',closeLb);
+$('.pv',lb).addEventListener('click',function(){show(idx-1)});
+$('.nx',lb).addEventListener('click',function(){show(idx+1)});
+lb.addEventListener('click',function(e){if(e.target===lb||e.target.classList.contains('meta'))closeLb()});
+document.addEventListener('keydown',function(e){
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();else if(e.key==='ArrowLeft')show(idx-1);else if(e.key==='ArrowRight')show(idx+1);
+});
+var sx=null;
+lb.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+lb.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>50)show(idx+(dx<0?1:-1))},{passive:true});
+
+/* ---------- formularz ---------- */
+$('#form').addEventListener('submit',function(e){e.preventDefault();$('#note').hidden=false});
+
+/* ---------- HERO 3D ---------- */
+var HERO=[
+ {src:'img/praca-04.jpg',cap:'Len · pasta strukturalna, akryl',str:1.9},
+ {src:'img/praca-10.jpg',cap:'Ochra · olej, szpachla',str:1.9},
+ {src:'img/praca-13.jpg',cap:'Biel · gips akrylowy, relief',str:2.0}
+];
+var dots=[].slice.call(document.querySelectorAll('.dots button'));
+function setDot(i){dots.forEach(function(d,k){d.setAttribute('aria-current',k===i)});$('#cap').textContent=HERO[i].cap}
+
+function initGL(){
+  if(typeof THREE==='undefined')return false;
+  var canvas=$('#gl'),renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:'low-power'})}catch(e){return false}
+  if(!renderer||!renderer.getContext())return false;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.setClearColor(0x1d1712,1);
+
+  var scene=new THREE.Scene(),aspect=1;
+  var cam=new THREE.OrthographicCamera(-1,1,1,-1,.1,10);cam.position.z=2;
+  var N=HERO.length,loaded=[],
+      blank=new THREE.DataTexture(new Uint8Array([128,128,255,255]),1,1,THREE.RGBAFormat);blank.needsUpdate=true;
+
+  var mat=new THREE.ShaderMaterial({
+    uniforms:{
+      mapA:{value:blank},mapB:{value:blank},nA:{value:blank},nB:{value:blank},
+      mixv:{value:0},light:{value:new THREE.Vector3(0,0,.6)},
+      sA:{value:new THREE.Vector2(1,1)},sB:{value:new THREE.Vector2(1,1)},
+      strA:{value:3},strB:{value:3}
+    },
+    vertexShader:'varying vec2 vUv;varying vec2 vP;void main(){vUv=uv;vP=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+    fragmentShader:[
+      'precision mediump float;varying vec2 vUv;varying vec2 vP;',
+      'uniform sampler2D mapA,mapB,nA,nB;uniform float mixv,strA,strB;uniform vec3 light;uniform vec2 sA,sB;',
+      'vec2 cuv(vec2 uv,vec2 s){return (uv-.5)*s+.5;}',
+      'void main(){',
+      ' vec2 ua=cuv(vUv,sA),ub=cuv(vUv,sB);',
+      ' vec3 ca=texture2D(mapA,ua).rgb,cb=texture2D(mapB,ub).rgb;',
+      ' vec3 na=texture2D(nA,ua).xyz*2.-1.,nb=texture2D(nB,ub).xyz*2.-1.;',
+      ' na.xy*=strA;nb.xy*=strB;',
+      ' vec3 col=mix(ca,cb,mixv);vec3 n=normalize(mix(na,nb,mixv));',
+      ' vec3 P=vec3(vP,0.);vec3 L=light-P;float d=length(L);L/=d;',
+      ' float att=1./(1.+1.1*d*d);',
+      ' float diff=max(dot(n,L),0.);',
+      ' vec3 V=vec3(0.,0.,1.);vec3 H=normalize(L+V);float sp=pow(max(dot(n,H),0.),28.)*.12;',
+      ' vec3 lc=vec3(1.,.9,.74);',
+      ' vec3 c=col*(vec3(.34,.31,.28)+lc*diff*att*1.6)+lc*sp*att;',
+      ' c=pow(c,vec3(.93));',
+      ' gl_FragColor=vec4(c,1.);}'
+    ].join('\n')
+  });
+  var mesh=new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat);scene.add(mesh);
+
+  function coverScale(img){ /* uv skala dla efektu object-fit:cover */
+    var ia=img.width/img.height;
+    return ia>aspect?new THREE.Vector2(aspect/ia,1):new THREE.Vector2(1,ia/aspect);
+  }
+
+  /* mapa normalnych z jasności obrazka */
+  function makeNormal(img){
+    var w=1024,h=Math.round(w*img.height/img.width);
+    var c=document.createElement('canvas');c.width=w;c.height=h;
+    var x=c.getContext('2d');x.drawImage(img,0,0,w,h);
+    var d=x.getImageData(0,0,w,h).data,g=new Float32Array(w*h),i,j;
+    for(i=0,j=0;i<g.length;i++,j+=4)g[i]=(.299*d[j]+.587*d[j+1]+.114*d[j+2])/255;
+    /* lekkie rozmycie: 2x box 3x3 */
+    var t=new Float32Array(w*h);
+    for(var pass=0;pass<3;pass++){
+      for(var yy=0;yy<h;yy++)for(var xx=0;xx<w;xx++){
+        var s=0,cn=0;
+        for(var dy=-1;dy<=1;dy++){var Y=yy+dy;if(Y<0||Y>=h)continue;for(var dx=-1;dx<=1;dx++){var X=xx+dx;if(X<0||X>=w)continue;s+=g[Y*w+X];cn++}}
+        t[yy*w+xx]=s/cn;
+      }
+      var sw=g;g=t;t=sw;
+    }
+    var out=x.createImageData(w,h),o=out.data,k=4.0;
+    function G(X,Y){X=X<0?0:X>=w?w-1:X;Y=Y<0?0:Y>=h?h-1:Y;return g[Y*w+X]}
+    for(var y=0;y<h;y++)for(var xp=0;xp<w;xp++){
+      var gx=(G(xp+1,y-1)+2*G(xp+1,y)+G(xp+1,y+1))-(G(xp-1,y-1)+2*G(xp-1,y)+G(xp-1,y+1));
+      var gy=(G(xp-1,y+1)+2*G(xp,y+1)+G(xp+1,y+1))-(G(xp-1,y-1)+2*G(xp,y-1)+G(xp+1,y-1));
+      var nx=-gx*k,ny=gy*k,nz=1,l=Math.sqrt(nx*nx+ny*ny+nz*nz);
+      var p=(y*w+xp)*4;
+      o[p]=(nx/l*.5+.5)*255;o[p+1]=(ny/l*.5+.5)*255;o[p+2]=(nz/l*.5+.5)*255;o[p+3]=255;
+    }
+    x.putImageData(out,0,0);
+    var tex=new THREE.CanvasTexture(c);tex.minFilter=THREE.LinearFilter;tex.generateMipmaps=false;
+    return tex;
+  }
+  function loadItem(i,cb){
+    if(loaded[i]){cb&&cb(loaded[i]);return}
+    var im=new Image();
+    im.onload=function(){
+      var tex=new THREE.Texture(im);tex.needsUpdate=true;tex.minFilter=THREE.LinearFilter;tex.generateMipmaps=false;
+      loaded[i]={img:im,map:tex,nrm:makeNormal(im),str:HERO[i].str};
+      cb&&cb(loaded[i]);
+    };
+    im.onerror=function(){};
+    im.src=HERO[i].src;
+  }
+  function applyA(it){mat.uniforms.mapA.value=it.map;mat.uniforms.nA.value=it.nrm;mat.uniforms.strA.value=it.str;mat.uniforms.sA.value=coverScale(it.img)}
+  function applyB(it){mat.uniforms.mapB.value=it.map;mat.uniforms.nB.value=it.nrm;mat.uniforms.strB.value=it.str;mat.uniforms.sB.value=coverScale(it.img)}
+
+  var shown=-1,ready=false,fade=null,pending=-1;
+  function resize(){
+    var w=hero.clientWidth,h=hero.clientHeight;if(!w||!h)return;
+    renderer.setSize(w,h,false);aspect=w/h;
+    cam.left=-aspect;cam.right=aspect;cam.top=1;cam.bottom=-1;cam.updateProjectionMatrix();
+    mesh.scale.set(aspect,1,1);
+    if(shown>=0&&loaded[shown]){applyA(loaded[shown]);applyB(loaded[shown])}
+    need=true;
+  }
+  var need=true;
+  function go(i){
+    if(i===shown&&!fade)return;
+    setDot(i);pending=i;
+    loadItem(i,function(it){
+      if(pending!==i)return;
+      if(shown<0){applyA(it);applyB(it);mat.uniforms.mixv.value=0;shown=i;ready=true;hero.classList.add('gl');need=true;return}
+      applyB(it);mat.uniforms.mixv.value=0;
+      /* A = poprzedni, B = nowy; po przejściu A=B */
+      var from=shown;shown=i;
+      var t0=performance.now(),dur=reduce?1:900;
+      fade={t0:t0,dur:dur,to:it};
+      need=true;
+    });
+  }
+  dots.forEach(function(b){b.addEventListener('click',function(){go(+b.dataset.i)})});
+
+  /* światło */
+  var target=new THREE.Vector3(0,0,.6),pos=new THREE.Vector3(.4,.3,.6),lastMove=-1e9,t=0;
+  function setTarget(cx,cy){
+    var r=hero.getBoundingClientRect();
+    var nx=((cx-r.left)/r.width)*2-1,ny=-(((cy-r.top)/r.height)*2-1);
+    nx=Math.max(-1.1,Math.min(1.1,nx));ny=Math.max(-1.1,Math.min(1.1,ny));
+    target.set(nx*aspect,ny,.55);lastMove=performance.now();
+  }
+  hero.addEventListener('pointermove',function(e){setTarget(e.clientX,e.clientY)},{passive:true});
+  hero.addEventListener('pointerdown',function(e){setTarget(e.clientX,e.clientY)},{passive:true});
+  window.addEventListener('touchmove',function(e){if(e.touches[0]&&visible)setTarget(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
+  hero.addEventListener('touchstart',function(e){if(e.touches[0])setTarget(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
+
+  var visible=true,running=false,raf=0,prev=performance.now();
+  function frame(now){
+    raf=0;if(!visible||document.hidden||!ready){running=false;return}
+    var dt=Math.min((now-prev)/1000,.1);prev=now;
+    if(fade){
+      var p=Math.min((now-fade.t0)/fade.dur,1);
+      mat.uniforms.mixv.value=p*p*(3-2*p);
+      if(p>=1){applyA(fade.to);mat.uniforms.mixv.value=0;applyB(fade.to);fade=null}
+    }
+    var idle=now-lastMove>3000;
+    if(idle&&!reduce){
+      t+=dt*.35;
+      target.set(Math.cos(t)*aspect*.62,Math.sin(t*1.3)*.5,.5+.08*Math.sin(t*.7));
+    }else if(idle&&reduce){target.set(.35*aspect,.3,.55)}
+    var k=1-Math.pow(.001,dt*1.1);
+    pos.lerp(target,k);
+    mat.uniforms.light.value.copy(pos);
+    renderer.render(scene,cam);
+    raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(!running&&visible&&!document.hidden&&ready){running=true;prev=performance.now();raf=requestAnimationFrame(frame)}}
+  /* render spoczynkowy dla reduced-motion: jeden-dwa klatki po zmianach */
+  setInterval(function(){kick()},500);
+
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)kick()},{threshold:0}).observe(hero);
+  }
+  document.addEventListener('visibilitychange',kick);
+  window.addEventListener('resize',function(){resize();kick()});
+  window.addEventListener('orientationchange',function(){setTimeout(function(){resize();kick()},250)});
+  canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();ready=false;hero.classList.remove('gl')},false);
+  canvas.addEventListener('webglcontextrestored',function(){
+    loaded=[];var s=shown;shown=-1;go(s<0?0:s);
+  },false);
+
+  resize();go(0);
+  /* reszta obrazów w tle, gdy przeglądarka ma wolną chwilę */
+  var idleCb=window.requestIdleCallback||function(f){setTimeout(f,1500)};
+  idleCb(function(){loadItem(1);setTimeout(function(){loadItem(2)},800)});
+  return true;
+}
+try{if(!initGL()){hero.classList.remove('gl')}}catch(err){hero.classList.remove('gl');if(window.console)console.warn('Hero 3D niedostępne, tryb zastępczy',err)}
+/* fallback: kropki zmieniają tło CSS */
+dots.forEach(function(b){b.addEventListener('click',function(){
+  var i=+b.dataset.i;setDot(i);if(!hero.classList.contains('gl'))hero.style.backgroundImage='url('+HERO[i].src+')';
+})});
+})();
+</script>
+</body>
+</html>

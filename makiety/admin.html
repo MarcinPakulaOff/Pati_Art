@@ -130,7 +130,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--brown)}
 .preview .note{font-size:14px;color:var(--ink-soft);margin:10px 0 0}
 .savebar{position:fixed;left:0;right:0;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));z-index:25;background:var(--surface);border-top:1px solid var(--line);padding:10px var(--gutr) 10px var(--gut);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .savebar .btn{flex:1}
-.savebar .del{flex:0 0 100%}
+.savebar .del{flex:0 0 auto;padding-inline:16px}
 .confirm{background:var(--sold-bg);border:1.5px solid var(--sold);color:var(--sold);border-radius:12px;padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;flex:0 0 100%}
 .confirm p{margin:0;flex:1 1 100%;font-weight:500}
 .confirm .btn{flex:1;min-width:120px}
@@ -281,7 +281,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--brown)}
   <div class="savebar" id="savebar">
     <button class="btn" id="saveBtn" type="button">Zapisz</button>
     <button class="btn ghost" id="cancelBtn" type="button">Anuluj</button>
-    <button class="btn danger del" id="delBtn" type="button" hidden>Usuń obraz</button>
+    <button class="btn danger del" id="delBtn" type="button" hidden aria-label="Usuń obraz">Usuń</button>
     <div class="confirm" id="delConfirm" hidden>
       <p id="delTxt"></p>
       <button class="btn yes" id="delYes" type="button">Usuń</button>
