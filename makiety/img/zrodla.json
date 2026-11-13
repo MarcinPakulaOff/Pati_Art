@@ -1,0 +1,312 @@
+[
+ {
+  "plik": "praca-01.jpg",
+  "autor": "Soraya Silvestri",
+  "unsplash": "https://unsplash.com/photos/an-abstract-painting-with-black-and-white-colors-LmC65WoT3Rk",
+  "opis": "an abstract painting with black and white colors",
+  "wymiary": [
+   1800,
+   1789
+  ]
+ },
+ {
+  "plik": "praca-02.jpg",
+  "autor": "Josep Martins",
+  "unsplash": "https://unsplash.com/photos/white-and-purple-abstract-painting-l3-erg8nPRU",
+  "opis": "white and purple abstract painting",
+  "wymiary": [
+   1800,
+   2400
+  ]
+ },
+ {
+  "plik": "praca-03.jpg",
+  "autor": "Europeana",
+  "unsplash": "https://unsplash.com/photos/a-painting-with-a-lot-of-different-colors-and-shapes-pycEuXHETPs",
+  "opis": "a painting with a lot of different colors and shapes",
+  "wymiary": [
+   1800,
+   2706
+  ]
+ },
+ {
+  "plik": "praca-04.jpg",
+  "autor": "Pawel Czerwinski",
+  "unsplash": "https://unsplash.com/photos/white-and-gray-abstract-painting-9lNoGFaNI2c",
+  "opis": "white and gray abstract painting",
+  "wymiary": [
+   1800,
+   2700
+  ]
+ },
+ {
+  "plik": "praca-05.jpg",
+  "autor": "Wiki Sinaloa",
+  "unsplash": "https://unsplash.com/photos/abstract-grayscale-texture-with-intersecting-lines-mKYTZ10l9Hk",
+  "opis": "Abstract grayscale texture with intersecting lines",
+  "wymiary": [
+   1800,
+   2458
+  ]
+ },
+ {
+  "plik": "praca-06.jpg",
+  "autor": "Steve A Johnson",
+  "unsplash": "https://unsplash.com/photos/blue-and-yellow-abstract-painting-QDyQfPRtwaU",
+  "opis": "blue and yellow abstract painting",
+  "wymiary": [
+   1800,
+   1385
+  ]
+ },
+ {
+  "plik": "praca-07.jpg",
+  "autor": "Steve A Johnson",
+  "unsplash": "https://unsplash.com/photos/a-piece-of-art-that-looks-like-a-painting-H68w9ML9PaM",
+  "opis": "a piece of art that looks like a painting",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "praca-09.jpg",
+  "autor": "engin akyurt",
+  "unsplash": "https://unsplash.com/photos/a-close-up-of-a-painting-with-many-colors-XoDQN-fjoTQ",
+  "opis": "A close up of a painting with many colors",
+  "wymiary": [
+   1800,
+   1350
+  ]
+ },
+ {
+  "plik": "praca-10.jpg",
+  "autor": "engin akyurt",
+  "unsplash": "https://unsplash.com/photos/an-abstract-painting-of-yellow-and-green-colors-UNUf126_enM",
+  "opis": "An abstract painting of yellow and green colors",
+  "wymiary": [
+   1800,
+   1350
+  ]
+ },
+ {
+  "plik": "praca-11.jpg",
+  "autor": "Jonathan Borba",
+  "unsplash": "https://unsplash.com/photos/textured-abstract-painting-with-pastel-floral-elements-02_sZBJNjaw",
+  "opis": "Textured abstract painting with pastel floral elements",
+  "wymiary": [
+   1800,
+   2700
+  ]
+ },
+ {
+  "plik": "praca-13.jpg",
+  "autor": "Aleksandr Buynitskiy",
+  "unsplash": "https://unsplash.com/photos/white-and-black-abstract-painting-eYXtuMFal8M",
+  "opis": "white and black abstract painting",
+  "wymiary": [
+   1800,
+   3200
+  ]
+ },
+ {
+  "plik": "praca-14.jpg",
+  "autor": "Klara Kulikova",
+  "unsplash": "https://unsplash.com/photos/brown-red-and-white-abstract-painting-kiLdjFm2y14",
+  "opis": "brown red and white abstract painting",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "gory-01.jpg",
+  "autor": "Birmingham Museums Trust",
+  "unsplash": "https://unsplash.com/photos/boat-on-blue-lake-beneath-mountains-RRn7VvZCbas",
+  "opis": "A small boat on a calm blue lake beneath towering snow-capped mountain peaks",
+  "wymiary": [
+   1800,
+   1188
+  ]
+ },
+ {
+  "plik": "gory-02.jpg",
+  "autor": "Europeana",
+  "unsplash": "https://unsplash.com/photos/a-painting-of-a-mountain-range-with-clouds-in-the-sky-MdVURXJRMsU",
+  "opis": "a painting of a mountain range with clouds in the sky",
+  "wymiary": [
+   1800,
+   1323
+  ]
+ },
+ {
+  "plik": "tlo-fala-01.jpg",
+  "autor": "Pawel Czerwinski",
+  "unsplash": "https://unsplash.com/photos/a-close-up-of-a-book-with-curved-pages-TV4yJcHQ6eY",
+  "opis": "a close up of a book with curved pages",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "tlo-fala-02.jpg",
+  "autor": "Pawel Czerwinski",
+  "unsplash": "https://unsplash.com/photos/stacked-wavy-beige-abstract-layers-EaZ0rkqXr-k",
+  "opis": "stacked wavy beige abstract layers",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "tlo-fala-03.jpg",
+  "autor": "Pawel Czerwinski",
+  "unsplash": "https://unsplash.com/photos/a-paper-sculpture-of-a-wave-on-a-beige-background-5Ug1fHXXonQ",
+  "opis": "a paper sculpture of a wave on a beige background",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "tlo-fala-04.jpg",
+  "autor": "Pawel Czerwinski",
+  "unsplash": "https://unsplash.com/photos/a-close-up-of-a-wall-with-a-white-background-q1s75bvggOw",
+  "opis": "A close up of a wall with a white background",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "tlo-swiatlo.jpg",
+  "autor": "Tim Schmidbauer",
+  "unsplash": "https://unsplash.com/photos/sunlight-casts-striped-shadows-across-a-framed-artwork-9wPBLs1ep7A",
+  "opis": "Sunlight casts striped shadows across a framed artwork",
+  "wymiary": [
+   1800,
+   2700
+  ]
+ },
+ {
+  "plik": "tlo-piasek.jpg",
+  "autor": "Annette Poi",
+  "unsplash": "https://unsplash.com/photos/a-person-riding-a-surfboard-on-top-of-a-sandy-beach-CcGb0JeKspo",
+  "opis": "a person riding a surfboard on top of a sandy beach",
+  "wymiary": [
+   1800,
+   2700
+  ]
+ },
+ {
+  "plik": "proces-01-plotno.jpg",
+  "autor": "Karen Bullaro",
+  "unsplash": "https://unsplash.com/photos/a-close-up-of-a-white-canvas-on-a-wooden-surface-KDW8GG_YJTw",
+  "opis": "a close up of a white canvas on a wooden surface",
+  "wymiary": [
+   1800,
+   1350
+  ]
+ },
+ {
+  "plik": "proces-02-szpachle.jpg",
+  "autor": "Steve A Johnson",
+  "unsplash": "https://unsplash.com/photos/black-and-red-handled-knives-on-white-textile-T0LKHmlzxuQ",
+  "opis": "black and red handled knives on white textile",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "proces-03-farba.jpg",
+  "autor": "Kseniya Lapteva",
+  "unsplash": "https://unsplash.com/photos/a-paintbrush-with-yellow-and-purple-paint-on-it--U83GVpKRQg",
+  "opis": "a paintbrush with yellow and purple paint on it",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "proces-04-sztaluga.jpg",
+  "autor": "Justyn Warner",
+  "unsplash": "https://unsplash.com/photos/brown-wooden-table-with-white-wall-VH8w75u3LE0",
+  "opis": "brown wooden table with white wall",
+  "wymiary": [
+   1800,
+   2400
+  ]
+ },
+ {
+  "plik": "proces-05-pracownia.jpg",
+  "autor": "Guillaume Didelet",
+  "unsplash": "https://unsplash.com/photos/a-room-filled-with-lots-of-art-and-paintings-h86S6CGiqJA",
+  "opis": "a room filled with lots of art and paintings",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "proces-pedzle.jpg",
+  "autor": "laura adai",
+  "unsplash": "https://unsplash.com/photos/white-ceramic-plate-with-paint-brushes-and-paint-brushes-xSMIuUDMMSY",
+  "opis": "white ceramic plate with paint brushes and paint brushes",
+  "wymiary": [
+   1800,
+   2696
+  ]
+ },
+ {
+  "plik": "proces-paleta.jpg",
+  "autor": "Jennie Razumnaya",
+  "unsplash": "https://unsplash.com/photos/paintbrushes-on-colorful-wooden-palette-rixN0q0IamQ",
+  "opis": "Six paintbrushes resting on a wooden palette covered in colorful oil paint",
+  "wymiary": [
+   1800,
+   2400
+  ]
+ },
+ {
+  "plik": "wnetrze-01.jpg",
+  "autor": "Taru Goyal",
+  "unsplash": "https://unsplash.com/photos/a-white-picture-frame-sitting-on-top-of-a-shelf-Kzu7T1rsAkw",
+  "opis": "a white picture frame sitting on top of a shelf",
+  "wymiary": [
+   1800,
+   2700
+  ]
+ },
+ {
+  "plik": "wnetrze-02.jpg",
+  "autor": "Imagine Reality Studio",
+  "unsplash": "https://unsplash.com/photos/modern-living-room-with-beige-sectional-sofa-and-art-4UJdTZdwh8o",
+  "opis": "Modern living room with beige sectional sofa and art",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ },
+ {
+  "plik": "wnetrze-03.jpg",
+  "autor": "Fredrik Posse",
+  "unsplash": "https://unsplash.com/photos/two-paintings-hang-on-the-wall-of-a-room-sYcpn_piEHE",
+  "opis": "two paintings hang on the wall of a room",
+  "wymiary": [
+   1800,
+   2700
+  ]
+ },
+ {
+  "plik": "wnetrze-04.jpg",
+  "autor": "Protex Plastering",
+  "unsplash": "https://unsplash.com/photos/bed-with-quilted-cover-in-bedroom-O5Ueow319AM",
+  "opis": "A bed with a quilted beige cover and decorative pillows in a sunlit bedroom",
+  "wymiary": [
+   1800,
+   1200
+  ]
+ }
+]
