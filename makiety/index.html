@@ -1,0 +1,148 @@
+<title>Makiety skart</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap">
+<style>
+  /* Układ: list do Pati u góry, pod nim pięć koncepcji jak prace na ścianie galerii (podgląd z telefonu + tabliczka), panel osobno na końcu.
+     Świadomie jeden jasny motyw — to papier i ściana pracowni, nie aplikacja. */
+  :root {
+    --wall: #f4ede3;
+    --paper: #fbf7f1;
+    --ink: #2a211b;
+    --ink-soft: #6d5f53;
+    --umber: #6b4a33;
+    --ochre: #b0803f;
+    --line: rgba(42, 33, 27, 0.14);
+    --font-script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
+    --font-display: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+    --font-body: "Jost", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+    color-scheme: light;
+  }
+  html { background: var(--wall); }
+  body {
+    background: var(--wall); color: var(--ink);
+    font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 48px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+
+  header.top { display: grid; justify-items: center; text-align: center; gap: 10px; padding-block: 56px 36px; }
+  .logo { display: grid; justify-items: center; line-height: 1; color: var(--ink); }
+  .logo .sk { font-family: var(--font-script); font-size: 46px; margin-bottom: -16px; color: var(--umber); }
+  .logo .art { font-family: var(--font-display); font-weight: 400; font-size: 54px; letter-spacing: 0.08em; margin-right: -0.08em; }
+  .kicker { font-size: 12px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--ink-soft); margin: 0; }
+
+  .letter {
+    max-width: 62ch; margin: 0 auto 56px; padding: 28px clamp(20px, 4vw, 40px);
+    background: var(--paper); border: 1px solid var(--line);
+  }
+  .letter p { margin: 0 0 12px; }
+  .letter p:last-child { margin-bottom: 0; }
+  .letter .hi { font-family: var(--font-display); font-style: italic; font-size: 26px; line-height: 1.2; margin-bottom: 14px; }
+  .letter ul { margin: 0 0 12px; padding-left: 1.1em; }
+  .letter li { margin-bottom: 4px; }
+
+  h2.section {
+    display: flex; align-items: center; gap: 16px;
+    font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 4vw, 34px);
+    letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 28px; text-wrap: balance;
+  }
+  h2.section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 44px 32px; margin-bottom: 64px; }
+  .concept { display: grid; gap: 14px; text-decoration: none; color: inherit; min-width: 0; }
+  .shot {
+    position: relative; aspect-ratio: 4 / 5; max-width: 100%; overflow: hidden; background: var(--paper);
+    box-shadow: 10px 14px 22px -12px rgba(42, 33, 27, 0.45), 2px 3px 6px rgba(42, 33, 27, 0.12);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .badge {
+    position: absolute; top: 12px; left: 12px; padding: 4px 10px;
+    background: var(--ink); color: var(--paper); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .badge.flat { background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+  .concept:hover .shot { transform: translateY(-4px); box-shadow: 12px 20px 28px -12px rgba(42, 33, 27, 0.5), 2px 3px 6px rgba(42, 33, 27, 0.12); }
+  .concept:focus-visible { outline: 2px solid var(--ochre); outline-offset: 6px; }
+
+  .label { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; }
+  .label .no { grid-row: span 3; font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--ochre); }
+  .label h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 26px; line-height: 1.15; }
+  .label p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .label .open { margin-top: 6px; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--umber); }
+
+  .admin {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 32px; align-items: center;
+    padding: 28px; background: var(--paper); border: 1px solid var(--line); text-decoration: none; color: inherit; margin-bottom: 56px;
+  }
+  .admin .shot { aspect-ratio: 16 / 10; box-shadow: none; border: 1px solid var(--line); }
+  .admin h3 { margin: 0 0 8px; font-family: var(--font-display); font-weight: 500; font-size: 30px; }
+  .admin p { margin: 0 0 10px; color: var(--ink-soft); }
+  .admin:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; }
+  @media (max-width: 720px) { .admin { grid-template-columns: 1fr; padding: 18px; } }
+
+  footer { max-width: 62ch; margin: 0 auto; text-align: center; color: var(--ink-soft); font-size: 13px; }
+  footer p { margin: 0 0 6px; }
+  @media (prefers-reduced-motion: reduce) { .shot { transition: none; } .concept:hover .shot { transform: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="logo" aria-label="skart"><span class="sk">sk</span><span class="art">ART</span></div>
+    <p class="kicker">Pięć propozycji strony</p>
+  </header>
+
+  <section class="letter" aria-label="Wstęp">
+    <p class="hi">Pati, wybierz kierunek.</p>
+    <p>Każda propozycja to klikalna strona: menu, galeria z powiększaniem, proces twórczy i formularz kontaktowy. Wszystkie mają tylko cztery zakładki, o które prosiłaś: O mnie, Galeria, Proces twórczy, Kontakt.</p>
+    <ul>
+      <li>Trzy wersje są klasyczne, dwie mają efekt 3D.</li>
+      <li>Obrazy są zastępcze, wzięte z darmowego banku zdjęć. W ich miejsce wejdą Twoje prace.</li>
+      <li>Formularz jeszcze niczego nie wysyła, to tylko wygląd.</li>
+    </ul>
+    <p>Nie musisz wybierać jednej w całości. Napisz po prostu, co Ci się podoba z której, a połączymy to w jedną stronę.</p>
+  </section>
+
+  <h2 class="section">Koncepcje</h2>
+  <div class="grid">
+    <a class="concept" href="k1-klasyczna.html">
+      <div class="shot"><span class="badge flat">Bez 3D</span><img src="img/podglad-k1.jpg" alt="Podgląd koncepcji Klasyczna na telefonie"></div>
+      <div class="label"><span class="no">1</span><h3>Klasyczna</h3><p>Najbliżej Twojego wzoru: beż, światło z okna, logo „sk ART” i trzy duże kafle.</p><span class="open">Otwórz →</span></div>
+    </a>
+    <a class="concept" href="k2-cisza.html">
+      <div class="shot"><span class="badge flat">Bez 3D</span><img src="img/podglad-k2.jpg" alt="Podgląd koncepcji Muzealna cisza na telefonie" loading="lazy"></div>
+      <div class="label"><span class="no">2</span><h3>Muzealna cisza</h3><p>Jasna ściana galerii, jeden obraz na ekran i muzealna tabliczka obok każdego.</p><span class="open">Otwórz →</span></div>
+    </a>
+    <a class="concept" href="k3-magazyn.html">
+      <div class="shot"><span class="badge flat">Bez 3D</span><img src="img/podglad-k3.jpg" alt="Podgląd koncepcji Magazyn na telefonie" loading="lazy"></div>
+      <div class="label"><span class="no">3</span><h3>Magazyn</h3><p>Odważna, jak okładka pisma o sztuce: ogromne „skart” na fakturze farby.</p><span class="open">Otwórz →</span></div>
+    </a>
+    <a class="concept" href="k4-faktura-3d.html">
+      <div class="shot"><span class="badge">3D</span><img src="img/podglad-k4.jpg" alt="Podgląd koncepcji Faktura 3D na telefonie" loading="lazy"></div>
+      <div class="label"><span class="no">4</span><h3>Faktura</h3><p>Przesuń palcem po ekranie, a światło przesunie się po farbie i pokaże jej grubość.</p><span class="open">Otwórz →</span></div>
+    </a>
+    <a class="concept" href="k5-galeria-3d.html">
+      <div class="shot"><span class="badge">3D</span><img src="img/podglad-k5.jpg" alt="Podgląd koncepcji Wirtualna galeria na telefonie" loading="lazy"></div>
+      <div class="label"><span class="no">5</span><h3>Wirtualna galeria</h3><p>Przewijając, idziesz korytarzem wystawy, a Twoje obrazy wiszą na ścianach.</p><span class="open">Otwórz →</span></div>
+    </a>
+  </div>
+
+  <h2 class="section">Twój panel</h2>
+  <a class="admin" href="admin.html">
+    <div class="shot"><img src="img/podglad-admin.jpg" alt="Podgląd panelu zarządzania galerią" loading="lazy"></div>
+    <div>
+      <h3>Tu sama dodajesz obrazy</h3>
+      <p>Robisz zdjęcie telefonem, wpisujesz tytuł i wymiar, a obraz pojawia się na stronie. Możesz go też ukryć, oznaczyć jako sprzedany albo przestawić kolejność.</p>
+      <p>Panel będzie wyglądał tak samo, niezależnie od tego, którą koncepcję wybierzesz.</p>
+      <span class="label"><span class="open">Zobacz panel →</span></span>
+    </div>
+  </a>
+
+  <footer>
+    <p>Najlepiej oglądać na telefonie. W wersjach 3D daj stronie chwilę na załadowanie obrazów.</p>
+    <p>Zdjęcia zastępcze: Unsplash.</p>
+  </footer>
+</div>
