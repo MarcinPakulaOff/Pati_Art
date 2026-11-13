@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<!--
+KONCEPCJA 2 — „Muzealna cisza”.
+Ciepła, prawie biała ściana galerii, jeden akcent (ochra) i malutka, rozstrzelona typografia. Obraz jest jedynym bohaterem: każda praca wisi na własnej „ścianie” z cieniem i muzealną etykietą.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>skart — Muzealna cisza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --wall:#f4f0e8;
+  --wall-2:#ece6da;
+  --ink:#171512;
+  --ink-soft:#5d574d;
+  --line:#cfc7b8;
+  --ochre:#a9772e;
+  --ochre-ink:#8a5f1f;
+  --gutter:max(16px, env(safe-area-inset-left));
+  --gutter-r:max(16px, env(safe-area-inset-right));
+  --serif:"Cormorant Garamond","Cormorant",Garamond,"Times New Roman",serif;
+  --sans:"Jost","Helvetica Neue",Arial,sans-serif;
+  --script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
+  --shadow: 2px 3px 4px rgba(40,30,15,.18), 9px 14px 22px rgba(40,30,15,.20), 22px 34px 56px rgba(40,30,15,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity;scroll-padding-top:64px;-webkit-text-size-adjust:100%}
+body{background:var(--wall);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--ochre-ink);outline-offset:4px}
+.caps{font-family:var(--sans);font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;font-weight:400}
+.wrap{padding-left:var(--gutter);padding-right:var(--gutter-r)}
+
+/* top strip + header */
+.strip{padding-top:10px;padding-bottom:0}
+.strip a{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none}
+.strip a:hover{color:var(--ochre-ink)}
+header.bar{position:sticky;top:0;z-index:30;background:rgba(244,240,232,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;min-height:60px;padding-left:var(--gutter);padding-right:var(--gutter-r);border-bottom:1px solid transparent}
+.logo{display:inline-flex;align-items:baseline;gap:.35em;text-decoration:none;line-height:1}
+.logo .sk{font-family:var(--script);font-size:1.7rem;margin-right:-.1em}
+.logo .art{font-family:var(--serif);font-weight:400;font-size:1.1rem;letter-spacing:.32em}
+nav.main{display:flex;gap:2.6rem}
+nav.main a{text-decoration:none;padding:.6rem 0;color:var(--ink);border-bottom:1px solid transparent}
+nav.main a:hover,nav.main a.on{color:var(--ochre-ink);border-bottom-color:var(--ochre)}
+.burger{display:none;min-width:44px;min-height:44px;align-items:center;justify-content:flex-end}
+.burger span{display:block;width:26px;height:1px;background:var(--ink);position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:26px;height:1px;background:var(--ink)}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+
+.overlay{position:fixed;inset:0;z-index:50;background:var(--wall);display:none;flex-direction:column;padding:0 var(--gutter-r) 0 var(--gutter)}
+.overlay.open{display:flex}
+.overlay .top{display:flex;justify-content:space-between;align-items:center;min-height:60px}
+.overlay ul{list-style:none;margin:auto 0;display:flex;flex-direction:column;gap:.4rem}
+.overlay li a{display:block;font-family:var(--serif);font-weight:300;font-size:2.6rem;line-height:1.5;text-decoration:none;padding:.15rem 0}
+.overlay li a span{font-family:var(--sans);font-size:.62rem;letter-spacing:.25em;color:var(--ochre-ink);margin-right:1.1rem;vertical-align:middle}
+.overlay .foot{padding-bottom:max(24px,env(safe-area-inset-bottom));color:var(--ink-soft)}
+.closex{min-width:44px;min-height:44px;font-size:1.6rem;font-weight:200;line-height:1}
+
+/* hero */
+.hero{min-height:calc(100svh - 60px);display:flex;flex-direction:column;align-items:center;padding-top:clamp(20px,5svh,56px);padding-bottom:clamp(40px,8svh,90px);scroll-snap-align:start}
+.hero .brand{text-align:center}
+.hero .brand .logo{font-size:1.2rem}
+.hero .brand .logo .sk{font-size:2.6rem}
+.hero .brand .logo .art{font-size:1.5rem}
+.motto{font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.05rem;color:var(--ink-soft);margin-top:.9rem;max-width:34ch;line-height:1.5}
+.hero .stage{margin-top:clamp(28px,6svh,64px);display:flex;align-items:flex-end;justify-content:center;gap:clamp(24px,3.5vw,56px);width:100%}
+.canvas{position:relative;display:block;line-height:0;cursor:zoom-in;background:#ddd6c8;box-shadow:var(--shadow)}
+.canvas img{width:100%;height:100%;object-fit:cover}
+.canvas::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),inset 2px 2px 6px rgba(255,255,255,.12);pointer-events:none}
+.hero .canvas{height:min(56svh,560px);aspect-ratio:933/1400}
+.plaque{background:#faf8f3;border:1px solid #e2dccf;padding:.9rem 1.05rem;box-shadow:1px 2px 3px rgba(40,30,15,.08);min-width:170px;max-width:210px;line-height:1.5;text-align:left}
+.plaque .no{font-size:.6rem;letter-spacing:.24em;color:var(--ochre-ink);display:block;margin-bottom:.35rem}
+.plaque h3{font-family:var(--serif);font-weight:400;font-size:1.25rem;line-height:1.15;margin-bottom:.35rem}
+.plaque p{font-size:.68rem;color:var(--ink-soft);letter-spacing:.04em;line-height:1.55}
+.scrollhint{margin-top:auto;padding-top:34px;color:var(--ink-soft);font-size:.58rem;letter-spacing:.3em}
+
+/* sections */
+section{scroll-margin-top:60px}
+.head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.6rem}
+.head .caps{color:var(--ink)}
+.head i{flex:1;height:1px;background:var(--line);align-self:center}
+.sec-title{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4vw,3rem);line-height:1.15}
+
+/* index */
+.index{padding-top:clamp(50px,9vw,110px);padding-bottom:clamp(40px,6vw,70px)}
+.index ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));column-gap:2.5rem;max-width:1100px}
+.index li a{display:flex;gap:.9rem;align-items:baseline;padding:.65rem 0;min-height:44px;border-bottom:1px solid var(--line);text-decoration:none;font-family:var(--serif);font-size:1.2rem;font-weight:300}
+.index li a small{font-family:var(--sans);font-size:.58rem;letter-spacing:.2em;color:var(--ochre-ink);min-width:1.6rem}
+.index li a:hover{color:var(--ochre-ink)}
+
+/* rooms */
+.room{min-height:100svh;display:flex;align-items:center;justify-content:center;gap:clamp(28px,5vw,80px);padding:84px var(--gutter-r) 84px var(--gutter);scroll-snap-align:center;position:relative}
+.room .canvas{flex:none}
+.room .plaque{align-self:flex-end;margin-bottom:6svh}
+.room:nth-child(even) .plaque{order:-1;align-self:flex-end}
+.counter{position:fixed;left:var(--gutter);bottom:max(18px,env(safe-area-inset-bottom));z-index:20;font-size:.66rem;letter-spacing:.28em;color:var(--ink);display:flex;gap:.9rem;align-items:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.counter.show{opacity:1;pointer-events:auto}
+.counter b{font-weight:400;color:var(--ochre-ink)}
+.counter a{text-decoration:none;color:var(--ink-soft);display:inline-flex;min-height:44px;align-items:center;padding:0 .2rem}
+.counter a:hover{color:var(--ochre-ink)}
+
+/* na scianie */
+.wall{padding:clamp(70px,12vw,150px) var(--gutter-r) clamp(70px,12vw,150px) var(--gutter);display:grid;grid-template-columns:minmax(240px,.7fr) minmax(0,1.3fr);gap:clamp(30px,6vw,100px);align-items:center;max-width:1300px;margin:0 auto}
+.wall .txt p{max-width:34ch;color:var(--ink-soft);font-size:.95rem;margin-top:1.2rem}
+.wall figure{position:relative;box-shadow:var(--shadow)}
+.wall figure img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.wall figcaption{position:absolute;left:0;bottom:-2.1rem;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* about */
+.about{padding:clamp(60px,10vw,130px) var(--gutter-r) clamp(60px,10vw,130px) var(--gutter);display:grid;grid-template-columns:minmax(0,34rem) minmax(0,26rem);gap:clamp(40px,8vw,140px);justify-content:center;align-items:start}
+.about p.lead{font-family:var(--serif);font-weight:300;font-size:clamp(1.4rem,2.2vw,1.8rem);line-height:1.5;margin-bottom:1.4rem}
+.about p{color:var(--ink-soft);font-size:.95rem;max-width:44ch}
+.sign{font-family:var(--script);font-size:2rem;color:var(--ink);margin-top:1.6rem;display:block}
+.about figure img{width:100%;aspect-ratio:935/1400;object-fit:cover;box-shadow:var(--shadow)}
+
+/* process */
+.process{padding:clamp(60px,9vw,120px) var(--gutter-r) clamp(60px,9vw,120px) var(--gutter);background:var(--wall-2)}
+.timeline{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,48px);margin-top:3.5rem;position:relative}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:5px;height:1px;background:var(--line)}
+.timeline li{position:relative;padding-top:2.2rem}
+.timeline li::before{content:"";position:absolute;top:0;left:0;width:11px;height:11px;border-radius:50%;background:var(--wall-2);border:1px solid var(--ochre)}
+.timeline .n{font-size:.62rem;letter-spacing:.26em;color:var(--ochre-ink)}
+.timeline h3{font-family:var(--serif);font-weight:300;font-size:1.7rem;margin:.2rem 0 .7rem;line-height:1.2}
+.timeline p{font-size:.88rem;color:var(--ink-soft);max-width:30ch}
+.timeline img{width:100%;aspect-ratio:4/3;object-fit:cover;margin-bottom:1.1rem;filter:saturate(.85)}
+
+/* contact */
+.contact{padding:clamp(70px,10vw,140px) var(--gutter-r) clamp(70px,10vw,130px) var(--gutter);display:grid;grid-template-columns:minmax(0,24rem) minmax(0,30rem);gap:clamp(40px,8vw,130px);justify-content:center}
+.contact .info p{color:var(--ink-soft);font-size:.95rem;margin:1.2rem 0 1.6rem;max-width:32ch}
+.contact .info dl{display:grid;gap:1rem}
+.contact dt{font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ochre-ink)}
+.contact dd{font-family:var(--serif);font-size:1.3rem;user-select:all;-webkit-user-select:all}
+form{display:grid;gap:1.6rem}
+.field label{display:block;font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+.field input,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--ink);border-radius:0;padding:.6rem 0;font:inherit;font-size:1rem;color:var(--ink);min-height:44px;outline:none;resize:none}
+.field input:focus,.field textarea:focus{border-bottom-color:var(--ochre)}
+.send{justify-self:start;min-height:44px;padding:0 2.2rem;border:1px solid var(--ink);font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;transition:background .2s,color .2s}
+.send:hover{background:var(--ink);color:var(--wall)}
+.note{min-height:1.5em;font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--ochre-ink)}
+
+footer{padding:36px var(--gutter-r) max(80px,env(safe-area-inset-bottom)) var(--gutter);border-top:1px solid var(--line);color:var(--ink-soft);font-size:.62rem;letter-spacing:.14em;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+footer a{text-decoration:none}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:var(--wall);display:none;flex-direction:column}
+.lb.open{display:flex}
+.lb .lbtop{display:flex;justify-content:space-between;align-items:center;padding:6px var(--gutter-r) 0 var(--gutter);min-height:56px}
+.lb .lbtop .caps{color:var(--ochre-ink)}
+.lb .view{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:8px 8px;position:relative;touch-action:pan-y}
+.lb .view img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:var(--shadow);background:#ddd6c8}
+.lb .arr{position:absolute;top:50%;transform:translateY(-50%);min-width:48px;min-height:64px;font-family:var(--serif);font-size:2.4rem;font-weight:200;color:var(--ink);z-index:2}
+.lb .prev{left:max(4px,env(safe-area-inset-left))}.lb .next{right:max(4px,env(safe-area-inset-right))}
+.lb .cap{padding:10px var(--gutter-r) max(18px,env(safe-area-inset-bottom)) var(--gutter);text-align:center;line-height:1.5}
+.lb .cap h3{font-family:var(--serif);font-weight:400;font-size:1.4rem}
+.lb .cap p{font-size:.7rem;letter-spacing:.06em;color:var(--ink-soft)}
+
+@media (max-width:900px){
+  nav.main{display:none}
+  .burger{display:inline-flex}
+  .room{flex-direction:column;gap:22px;padding-top:76px;padding-bottom:76px}
+  .room .plaque,.room:nth-child(even) .plaque{order:2;align-self:flex-start;margin:0;max-width:none;min-width:0;width:min(100%,300px)}
+  .hero .stage{flex-direction:column;align-items:center;gap:22px}
+  .hero .canvas{height:min(40svh,400px)}
+  .hero .plaque{align-self:flex-start;max-width:none;width:min(100%,300px)}
+  .wall,.about,.contact{grid-template-columns:minmax(0,1fr)}
+  .about figure{max-width:320px}
+  .timeline{grid-template-columns:1fr;gap:2.6rem;margin-top:2.5rem;padding-left:2rem}
+  .timeline::before{left:5px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .timeline li{padding-top:0}
+  .timeline li::before{left:-2rem;top:.2rem}
+  .timeline img{max-width:360px}
+  .counter{left:var(--gutter);right:var(--gutter-r);justify-content:space-between;background:rgba(244,240,232,.9);padding:0 .4rem;bottom:max(8px,env(safe-area-inset-bottom))}
+  .scrollhint{padding-top:26px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="strip wrap"><a href="index.html">&larr; Wszystkie koncepcje</a></div>
+
+<header class="bar">
+  <a class="logo" href="#top" aria-label="skart — początek strony"><span class="sk">sk</span><span class="art">ART</span></a>
+  <nav class="main caps" aria-label="Menu główne">
+    <a href="#o-mnie">O mnie</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#proces">Proces twórczy</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Otwórz menu" aria-expanded="false" aria-controls="overlay"><span></span></button>
+</header>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="top">
+    <a class="logo" href="#top"><span class="sk">sk</span><span class="art">ART</span></a>
+    <button class="closex" id="menuClose" aria-label="Zamknij menu">&times;</button>
+  </div>
+  <ul>
+    <li><a href="#o-mnie"><span>01</span>O mnie</a></li>
+    <li><a href="#galeria"><span>02</span>Galeria</a></li>
+    <li><a href="#proces"><span>03</span>Proces twórczy</a></li>
+    <li><a href="#kontakt"><span>04</span>Kontakt</a></li>
+  </ul>
+  <p class="foot caps">kontakt@skart.pl</p>
+</div>
+
+<main id="top">
+  <section class="hero wrap" aria-label="Początek">
+    <div class="brand">
+      <a class="logo" href="#top"><span class="sk">sk</span><span class="art">ART</span></a>
+      <p class="motto">„Nie każda historia wymaga słów. Niektóre znajdują swój wyraz w sztuce.”</p>
+    </div>
+    <div class="stage">
+      <a class="canvas" href="#praca-4" data-open="3" aria-label="Powiększ pracę Len"><img src="img/praca-04.jpg" alt="Obraz strukturalny „Len” — jasna, gruba faktura w ciepłych beżach" width="933" height="1400"></a>
+      <aside class="plaque" aria-label="Opis pracy">
+        <span class="no caps">04</span>
+        <h3>Len</h3>
+        <p>pasta strukturalna, akryl<br>60×90 cm, 2025</p>
+      </aside>
+    </div>
+    <a class="scrollhint caps" href="#galeria" style="text-decoration:none">Wejdź do sali &darr;</a>
+  </section>
+
+  <section id="galeria" aria-label="Galeria">
+    <div class="index wrap">
+      <div class="head"><span class="caps">Galeria</span><i></i><span class="caps" style="color:var(--ink-soft)">14 prac</span></div>
+      <ol id="indexList"></ol>
+    </div>
+    <div id="rooms"></div>
+  </section>
+
+  <section class="wall" aria-label="Na ścianie">
+    <div class="txt">
+      <div class="head"><span class="caps">Na ścianie</span><i></i></div>
+      <h2 class="sec-title">Obraz w domu</h2>
+      <p>Faktura żyje w świetle dnia. Tak wygląda biały relief na półce w jasnym wnętrzu — skala, cień i spokój.</p>
+    </div>
+    <figure>
+      <img src="img/wnetrze-02.jpg" alt="Beżowy salon z obrazem strukturalnym na ścianie" width="1400" height="933" loading="lazy">
+      <figcaption>Beżowy salon, obraz 80×120 cm</figcaption>
+    </figure>
+  </section>
+
+  <section id="o-mnie" class="about" aria-label="O mnie">
+    <div>
+      <div class="head"><span class="caps">O mnie</span><i></i></div>
+      <p class="lead">Maluję obrazy, które chce się dotknąć.</p>
+      <p>Pracuję szpachlą i pędzlem, warstwa po warstwie, aż farba zacznie rzucać własny cień. Tworzę obrazy strukturalne i klasyczne płótna — pejzaże, abstrakcje, światło. Każdy powstaje ręcznie, w jednym egzemplarzu.</p>
+      <span class="sign">— Patrycja</span>
+    </div>
+    <figure><img src="img/proces-pedzle.jpg" alt="Pędzle w ceramicznym słoju na pracowniczym stole" width="935" height="1400" loading="lazy"></figure>
+  </section>
+
+  <section id="proces" class="process" aria-label="Proces twórczy">
+    <div class="head"><span class="caps">Proces twórczy</span><i></i></div>
+    <h2 class="sec-title">Cztery kroki, kilka dni schnięcia</h2>
+    <ol class="timeline">
+      <li><img src="img/proces-01-plotno.jpg" alt="Czyste płótno przygotowane do pracy" loading="lazy"><span class="n">I</span><h3>Płótno</h3><p>Zaczynam od czystego płótna i szkicu w głowie, rzadko na papierze.</p></li>
+      <li><img src="img/proces-02-szpachle.jpg" alt="Szpachle i pasta strukturalna" loading="lazy"><span class="n">II</span><h3>Narzędzia</h3><p>Szpachle, pędzle, pasta strukturalna. Każde narzędzie zostawia inny ślad.</p></li>
+      <li><img src="img/proces-03-farba.jpg" alt="Gruba warstwa farby na płótnie" loading="lazy"><span class="n">III</span><h3>Warstwy</h3><p>Nakładam farbę grubo, warstwa po warstwie. Część musi schnąć kilka dni.</p></li>
+      <li><img src="img/proces-05-pracownia.jpg" alt="Pracownia w bocznym świetle okna" loading="lazy"><span class="n">IV</span><h3>Światło</h3><p>Na końcu sprawdzam obraz w bocznym świetle — dopiero wtedy widać fakturę.</p></li>
+    </ol>
+  </section>
+
+  <section id="kontakt" class="contact" aria-label="Kontakt">
+    <div class="info">
+      <div class="head"><span class="caps">Kontakt</span><i></i></div>
+      <h2 class="sec-title">Napisz</h2>
+      <p>Chcesz zapytać o obraz albo zamówić pracę na wymiar? Napisz.</p>
+      <dl>
+        <div><dt>E-mail</dt><dd>kontakt@skart.pl</dd></div>
+        <div><dt>Instagram</dt><dd>@skart.art</dd></div>
+      </dl>
+    </div>
+    <form id="form" novalidate>
+      <div class="field"><label for="f-name">Imię</label><input id="f-name" name="name" type="text" autocomplete="name"></div>
+      <div class="field"><label for="f-mail">E-mail</label><input id="f-mail" name="email" type="email" autocomplete="email"></div>
+      <div class="field"><label for="f-msg">Wiadomość</label><textarea id="f-msg" name="msg" rows="4"></textarea></div>
+      <button class="send" type="submit">Wyślij</button>
+      <p class="note" id="note" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 skart · Wszystkie obrazy malowane ręcznie</span>
+  <span>Zdjęcia w makiecie: Unsplash (zastępcze)</span>
+</footer>
+
+<div class="counter caps" id="counter" aria-label="Pozycja w galerii">
+  <span><b id="cNow">01</b> / <span id="cAll">14</span></span>
+  <a href="#galeria">Indeks</a>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Podgląd pracy">
+  <div class="lbtop"><span class="caps" id="lbNo">01 / 14</span><button class="closex" id="lbClose" aria-label="Zamknij podgląd">&times;</button></div>
+  <div class="view" id="lbView">
+    <button class="arr prev" id="lbPrev" aria-label="Poprzednia praca">&lsaquo;</button>
+    <img id="lbImg" src="" alt="">
+    <button class="arr next" id="lbNext" aria-label="Następna praca">&rsaquo;</button>
+  </div>
+  <div class="cap"><h3 id="lbTitle"></h3><p id="lbMeta"></p></div>
+</div>
+
+<script>
+(function(){
+  var W=[
+    ["praca-01","Szum","akryl, pasta strukturalna, płótno","80×80 cm",2025,"Kwadratowy obraz strukturalny w chłodnych bielach i szarościach"],
+    ["praca-02","Szron","akryl, szpachla, płótno","60×80 cm",2025,"Obraz szpachlowy w chłodnych szarościach z lodową fakturą"],
+    ["praca-03","Zapiski","olej, płótno","50×70 cm",2024,"Malowany pędzlem obraz olejny w stonowanych barwach"],
+    ["praca-04","Len","pasta strukturalna, akryl","60×90 cm",2025,"Obraz strukturalny o jasnej, lnianej fakturze"],
+    ["praca-05","Krata","technika mieszana","70×100 cm",2024,"Obraz w technice mieszanej z siatką pociągnięć"],
+    ["praca-06","Odwilż","akryl, szpachla","100×80 cm",2025,"Poziomy obraz szpachlowy przypominający topniejący lód"],
+    ["praca-07","Brzeg","akryl, pasta strukturalna","120×80 cm",2025,"Szeroki obraz strukturalny z wyraźnym, faliście ułożonym brzegiem"],
+    ["praca-09","Jesień w glinie","olej, szpachla","80×60 cm",2024,"Obraz olejny w glinianych, jesiennych brązach"],
+    ["praca-10","Ochra","olej, szpachla","80×60 cm",2024,"Obraz olejny w ciepłej ochrze, nakładany szpachlą"],
+    ["praca-11","Pastel","pasta strukturalna, akryl","40×60 cm",2025,"Pastelowy obraz strukturalny w delikatnych różach i beżach"],
+    ["praca-13","Biel","gips akrylowy, relief","50×90 cm",2025,"Biały relief z gipsu akrylowego"],
+    ["praca-14","Żar","olej, szpachla","90×60 cm",2024,"Ciemny obraz olejny z rozżarzonymi akcentami"],
+    ["gory-01","Jezioro pod szczytem","olej, płótno","100×70 cm",2023,"Pejzaż górski: jezioro pod szczytem"],
+    ["gory-02","Dolina","olej, płótno","100×70 cm",2023,"Pejzaż górski: dolina między szczytami"]
+  ];
+  var SZ={"praca-01":[1400,1391],"praca-02":[1050,1400],"praca-03":[931,1400],"praca-04":[933,1400],"praca-05":[1025,1400],"praca-06":[1400,1077],"praca-07":[1400,933],"praca-09":[1400,1050],"praca-10":[1400,1050],"praca-11":[933,1400],"praca-13":[787,1400],"praca-14":[1400,933],"gory-01":[1400,924],"gory-02":[1400,1029]};
+  function p2(n){return (n<10?"0":"")+n}
+  function $(id){return document.getElementById(id)}
+  var rooms=$("rooms"),idx=$("indexList");
+  W.forEach(function(w,i){
+    var s=SZ[w[0]],ratio=s[0]/s[1];
+    var sec=document.createElement("article");
+    sec.className="room";sec.id="praca-"+(i+1);sec.setAttribute("data-i",i);
+    /* rozmiar: szerokość/wysokość ograniczone tak, by obraz mieścił się na ekranie */
+    var h="min(64svh,calc((100vw - 2*max(16px,env(safe-area-inset-left)))/"+ratio.toFixed(4)+"),640px)";
+    var hDesk="min(64svh,640px,calc(52vw/"+ratio.toFixed(4)+"))";
+    var a=document.createElement("a");
+    a.className="canvas";a.href="#praca-"+(i+1);a.setAttribute("data-open",i);
+    a.setAttribute("aria-label","Powiększ pracę "+w[1]);
+    a.style.aspectRatio=s[0]+"/"+s[1];
+    a.style.height=window.innerWidth>900?hDesk:h;
+    a.innerHTML='<img src="img/'+w[0]+'.jpg" alt="'+w[5]+' — „'+w[1]+'”" width="'+s[0]+'" height="'+s[1]+'" loading="'+(i<2?"eager":"lazy")+'">';
+    a.dataset.ratio=ratio;
+    var pl=document.createElement("aside");pl.className="plaque";
+    pl.innerHTML='<span class="no caps">'+p2(i+1)+'</span><h3>'+w[1]+'</h3><p>'+w[2]+'<br>'+w[3]+', '+w[4]+'</p>';
+    sec.appendChild(a);sec.appendChild(pl);rooms.appendChild(sec);
+    var li=document.createElement("li");
+    li.innerHTML='<a href="#praca-'+(i+1)+'"><small>'+p2(i+1)+'</small>'+w[1]+'</a>';
+    idx.appendChild(li);
+  });
+  $("cAll").textContent=p2(W.length);
+  function fit(){
+    document.querySelectorAll("#rooms .canvas").forEach(function(a){
+      var r=a.dataset.ratio;
+      a.style.height=window.innerWidth>900?"min(64svh,640px,calc(52vw/"+r+"))":"min(56svh,calc((100vw - 34px)/"+r+"),560px)";
+    });
+  }
+  fit();window.addEventListener("resize",fit);
+
+  /* licznik */
+  var cn=$("cNow"),counter=$("counter"),gal=$("galeria");
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){cn.textContent=p2(+e.target.getAttribute("data-i")+1)}});
+    },{rootMargin:"-45% 0px -45% 0px"});
+    document.querySelectorAll(".room").forEach(function(r){io.observe(r)});
+    var io2=new IntersectionObserver(function(es){
+      counter.classList.toggle("show",es[0].isIntersecting);
+    },{rootMargin:"-30% 0px -30% 0px"});
+    io2.observe($("rooms"));
+    /* aktywna pozycja menu */
+    var links=document.querySelectorAll("nav.main a");
+    var map={};links.forEach(function(l){map[l.getAttribute("href").slice(1)]=l});
+    var io3=new IntersectionObserver(function(es){
+      es.forEach(function(e){var l=map[e.target.id];if(l)l.classList.toggle("on",e.isIntersecting)});
+    },{rootMargin:"-40% 0px -50% 0px"});
+    ["o-mnie","galeria","proces","kontakt"].forEach(function(id){io3.observe($(id))});
+  }
+
+  /* menu mobilne */
+  var ov=$("overlay"),bg=$("burger");
+  function menu(open){ov.classList.toggle("open",open);bg.setAttribute("aria-expanded",open);document.body.style.overflow=open?"hidden":"";if(open)$("menuClose").focus();else bg.focus()}
+  bg.addEventListener("click",function(){menu(true)});
+  $("menuClose").addEventListener("click",function(){menu(false)});
+  ov.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){ov.classList.remove("open");bg.setAttribute("aria-expanded","false");document.body.style.overflow=""})});
+
+  /* lightbox */
+  var lb=$("lb"),cur=0,opener=null;
+  function show(i){
+    cur=(i+W.length)%W.length;var w=W[cur];
+    var im=$("lbImg");im.src="img/"+w[0]+".jpg";im.alt=w[5]+" — „"+w[1]+"”";
+    $("lbNo").textContent=p2(cur+1)+" / "+p2(W.length);
+    $("lbTitle").textContent=w[1];$("lbMeta").textContent=w[2]+" · "+w[3]+" · "+w[4];
+  }
+  function openLb(i,from){opener=from||null;show(i);lb.classList.add("open");document.body.style.overflow="hidden";$("lbClose").focus()}
+  function closeLb(){lb.classList.remove("open");document.body.style.overflow="";if(opener)opener.focus()}
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("[data-open]");
+    if(t){e.preventDefault();openLb(+t.getAttribute("data-open"),t)}
+  });
+  $("lbClose").addEventListener("click",closeLb);
+  $("lbPrev").addEventListener("click",function(){show(cur-1)});
+  $("lbNext").addEventListener("click",function(){show(cur+1)});
+  $("lbView").addEventListener("click",function(e){if(e.target===this)closeLb()});
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"){if(lb.classList.contains("open"))closeLb();else if(ov.classList.contains("open"))menu(false)}
+    if(lb.classList.contains("open")){if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1)}
+  });
+  var sx=null,sy=null;
+  $("lbView").addEventListener("touchstart",function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  $("lbView").addEventListener("touchend",function(e){
+    if(sx===null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3)show(dx<0?cur+1:cur-1);
+  },{passive:true});
+
+  /* formularz */
+  $("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    $("note").textContent="To makieta — formularz zacznie działać na prawdziwej stronie.";
+  });
+})();
+</script>
+</body>
+</html>
