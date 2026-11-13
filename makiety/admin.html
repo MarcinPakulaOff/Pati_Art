@@ -1,0 +1,569 @@
+<!doctype html>
+<!--
+  Panel Pati — makieta panelu admina marki „skart”.
+  Idea: ciche, ciepłe narzędzie (krem, brąz), w którym Pati sama dodaje obrazy, układa kolejność,
+  edytuje proces twórczy i czyta wiadomości — z telefonu (dolny pasek) i z komputera (boczny pasek).
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panel Pati – skart</title>
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Pinyon+Script&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f5efe6; --surface:#fffdf9; --line:#e3d9ca; --line-strong:#cdbfab;
+  --ink:#2b211a; --ink-soft:#6b5b4d; --brown:#7a4e2d; --brown-dark:#5c3a20; --brown-tint:#efe3d3;
+  --ok:#2f6b45; --ok-bg:#e3f0e6; --warn:#8a5a12; --warn-bg:#f6e8c8; --sold:#8a2f2f; --sold-bg:#f4dcd8;
+  --hid:#5b5550; --hid-bg:#e9e4dd;
+  --font-ui:"Jost","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
+  --font-serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --gut:max(16px,env(safe-area-inset-left));
+  --gutr:max(16px,env(safe-area-inset-right));
+  --nav-h:64px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:17px;line-height:1.45;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--brown);outline-offset:2px;border-radius:6px}
+img{display:block;max-width:100%}
+[hidden]{display:none!important}
+
+.mockbar{background:var(--ink);color:#f1e7d8;font-size:13px;text-align:center;padding:5px 12px;padding-top:max(5px,env(safe-area-inset-top))}
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:8px var(--gutr) 8px var(--gut);min-height:60px}
+.logo{display:flex;align-items:baseline;gap:2px;text-decoration:none;color:var(--ink);margin-right:auto}
+.logo .sk{font-family:var(--font-script);font-size:34px;color:var(--brown);line-height:1}
+.logo .art{font-family:var(--font-serif);font-weight:600;letter-spacing:.18em;font-size:20px}
+.logo .tag{font-size:13px;color:var(--ink-soft);margin-left:10px;letter-spacing:.04em}
+.who{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--ink-soft)}
+.who .av{width:34px;height:34px;border-radius:50%;background:var(--brown-tint);color:var(--brown-dark);display:grid;place-items:center;font-weight:600}
+.who b{color:var(--ink);font-weight:500}
+.seesite{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1.5px solid var(--brown);border-radius:999px;color:var(--brown-dark);text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
+.seesite:hover{background:var(--brown-tint)}
+
+.layout{display:block}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.nav button{background:none;border:0;min-height:var(--nav-h);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12.5px;color:var(--ink-soft);position:relative;padding:6px 2px}
+.nav button svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav button[aria-current="page"]{color:var(--brown-dark);font-weight:600}
+.nav button[aria-current="page"]::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;background:var(--brown);border-radius:0 0 3px 3px}
+.badge{position:absolute;top:6px;left:calc(50% + 8px);min-width:20px;height:20px;border-radius:10px;background:var(--brown);color:#fff;font-size:12px;display:grid;place-items:center;padding:0 5px;font-weight:600}
+
+main{padding:20px var(--gutr) calc(var(--nav-h) + env(safe-area-inset-bottom) + 90px) var(--gut);max-width:1100px}
+h1{font-family:var(--font-serif);font-weight:600;font-size:32px;margin:0 0 4px;line-height:1.1}
+.lead{margin:0 0 18px;color:var(--ink-soft);font-size:16px}
+.head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:12px;border:1.5px solid var(--brown);background:var(--brown);color:#fff;font-weight:500;font-size:17px;text-decoration:none}
+.btn:hover{background:var(--brown-dark)}
+.btn.ghost{background:transparent;color:var(--brown-dark)}
+.btn.ghost:hover{background:var(--brown-tint)}
+.btn.danger{background:transparent;border-color:var(--sold);color:var(--sold)}
+.btn.danger:hover{background:var(--sold-bg)}
+.btn.sm{min-height:44px;padding:0 14px;font-size:15px}
+.btn.full{width:100%}
+
+.tools{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.seg{display:flex;gap:6px;background:var(--brown-tint);padding:4px;border-radius:14px}
+.seg button{flex:1;min-height:44px;border:0;background:transparent;border-radius:10px;font-size:16px;color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(60,40,20,.15)}
+.search{width:100%;min-height:48px;border:1.5px solid var(--line-strong);border-radius:12px;padding:0 14px;font-size:16px;background:var(--surface)}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;list-style:none;margin:0;padding:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.card.dragging{opacity:.4}
+.card.over{outline:3px dashed var(--brown);outline-offset:-3px}
+.card .thumb{aspect-ratio:1/1;background:var(--brown-tint);width:100%;border:0;padding:0;display:block;cursor:pointer}
+.card .thumb img{width:100%;height:100%;object-fit:cover}
+.card .info{padding:10px 12px 8px;display:flex;flex-direction:column;gap:4px;flex:1}
+.card .t{font-family:var(--font-serif);font-weight:600;font-size:20px;line-height:1.1}
+.card .y{font-size:14px;color:var(--ink-soft)}
+.card .actions{display:flex;border-top:1px solid var(--line)}
+.card .actions button{flex:1;min-height:44px;border:0;background:transparent;font-size:15px;color:var(--brown-dark);display:flex;align-items:center;justify-content:center;gap:4px}
+.card .actions button+button{border-left:1px solid var(--line)}
+.card .actions button:disabled{opacity:.3;cursor:default}
+.card .actions .edit{flex:2;font-weight:500}
+.card .handle{display:none}
+.pill{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;font-size:13.5px;font-weight:500;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.pill.live{color:var(--ok);background:var(--ok-bg)}
+.pill.hidden{color:var(--hid);background:var(--hid-bg)}
+.pill.sold{color:var(--sold);background:var(--sold-bg)}
+
+.empty{border:2px dashed var(--line-strong);border-radius:16px;padding:36px 20px;text-align:center;color:var(--ink-soft);background:var(--surface)}
+.empty .sk{font-family:var(--font-script);font-size:56px;color:var(--brown);line-height:1}
+.empty p{margin:6px 0 16px}
+
+/* form */
+.formwrap{display:grid;gap:22px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field label,.field .lbl{font-weight:500;font-size:16px}
+.hint{font-size:14px;color:var(--ink-soft)}
+input[type=text],input[type=number],select,textarea{width:100%;min-height:48px;border:1.5px solid var(--line-strong);border-radius:12px;padding:10px 14px;font-size:16px;background:#fff}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--brown)}
+.dims{display:flex;align-items:center;gap:10px}
+.dims span{font-size:20px;color:var(--ink-soft)}
+.photo{display:flex;flex-direction:column;gap:10px}
+.photo .box{aspect-ratio:4/3;max-height:340px;border:2px dashed var(--line-strong);border-radius:14px;background:var(--bg);display:grid;place-items:center;overflow:hidden;color:var(--ink-soft);text-align:center}
+.photo .box img{width:100%;height:100%;object-fit:cover}
+.photo input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.switch{display:flex;align-items:center;gap:14px;min-height:52px;cursor:pointer}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .track{width:56px;height:32px;border-radius:16px;background:var(--line-strong);position:relative;flex:none;transition:background .15s}
+.switch .track::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s}
+.switch input:checked+.track{background:var(--ok)}
+.switch input:checked+.track::after{transform:translateX(24px)}
+.switch input:focus-visible+.track{outline:3px solid var(--brown);outline-offset:2px}
+.preview{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.preview h2{font-size:17px;margin:0 0 10px;font-weight:600}
+.preview .card{max-width:260px;pointer-events:none}
+.preview .card.off{opacity:.55}
+.preview .note{font-size:14px;color:var(--ink-soft);margin:10px 0 0}
+.savebar{position:fixed;left:0;right:0;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));z-index:25;background:var(--surface);border-top:1px solid var(--line);padding:10px var(--gutr) 10px var(--gut);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.savebar .btn{flex:1}
+.savebar .del{flex:0 0 100%}
+.confirm{background:var(--sold-bg);border:1.5px solid var(--sold);color:var(--sold);border-radius:12px;padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;flex:0 0 100%}
+.confirm p{margin:0;flex:1 1 100%;font-weight:500}
+.confirm .btn{flex:1;min-width:120px}
+.confirm .btn.yes{background:var(--sold);border-color:var(--sold);color:#fff}
+.confirm .btn.no{background:#fff;color:var(--ink);border-color:var(--line-strong)}
+.inlineconfirm{margin-top:10px}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:12px}
+.step .sh{display:flex;align-items:center;gap:10px}
+.step .num{width:38px;height:38px;border-radius:50%;background:var(--brown);color:#fff;display:grid;place-items:center;font-family:var(--font-serif);font-weight:600;font-size:20px;flex:none}
+.step .sh .mv{margin-left:auto;display:flex;gap:6px}
+.iconbtn{min-width:44px;min-height:44px;border-radius:12px;border:1.5px solid var(--line-strong);background:#fff;color:var(--brown-dark);display:grid;place-items:center;font-size:20px;line-height:1}
+.iconbtn:disabled{opacity:.3}
+.step .body{display:grid;gap:12px}
+.step .ph{display:flex;gap:12px;align-items:center}
+.step .ph img,.step .ph .none{width:84px;height:84px;object-fit:cover;border-radius:10px;background:var(--brown-tint);flex:none}
+.step .ph .none{display:grid;place-items:center;color:var(--ink-soft);font-size:13px;text-align:center}
+.step .ph input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
+.step .foot{display:flex;justify-content:flex-end}
+
+/* messages */
+.inbox{display:grid;gap:10px;list-style:none;margin:0;padding:0}
+.msg{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.msg>button{width:100%;text-align:left;background:none;border:0;padding:14px;min-height:64px;display:flex;gap:12px;align-items:flex-start}
+.dot{width:12px;height:12px;border-radius:50%;margin-top:6px;flex:none;border:2px solid var(--line-strong)}
+.msg.unread .dot{background:var(--brown);border-color:var(--brown)}
+.msg.unread .from{font-weight:600}
+.msg .m{flex:1;min-width:0}
+.msg .from{display:flex;justify-content:space-between;gap:8px}
+.msg .when{font-size:14px;color:var(--ink-soft);font-weight:400;white-space:nowrap}
+.msg .sub{color:var(--ink-soft);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg .ex{display:inline-block;font-size:12px;background:var(--warn-bg);color:var(--warn);border-radius:6px;padding:1px 7px;margin-left:6px;font-weight:500}
+.msg .detail{padding:0 14px 16px 38px;border-top:1px solid var(--line);padding-top:14px}
+.msg .detail p{margin:0 0 14px;white-space:pre-wrap}
+.copybox{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--brown-tint);border-radius:12px;padding:12px}
+.copybox code{font-family:var(--font-ui);font-size:17px;font-weight:500;user-select:all;-webkit-user-select:all;word-break:break-all;flex:1 1 180px}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 84px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;z-index:60;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:calc(100vw - 32px);text-align:center}
+
+/* desktop */
+@media (min-width:900px){
+  body{font-size:16px}
+  .layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 92px)}
+  .nav{position:sticky;top:61px;align-self:start;height:calc(100vh - 92px);grid-template-columns:1fr;grid-auto-rows:min-content;border-top:0;border-right:1px solid var(--line);padding:20px 12px;gap:6px;z-index:10}
+  .nav button{flex-direction:row;justify-content:flex-start;gap:14px;min-height:52px;padding:0 16px;border-radius:12px;font-size:17px}
+  .nav button[aria-current="page"]{background:var(--brown-tint)}
+  .nav button[aria-current="page"]::before{display:none}
+  .badge{position:static;margin-left:auto}
+  main{padding:28px 32px 120px;max-width:1200px;width:100%}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .card .handle{display:grid;position:absolute;top:8px;left:8px;width:34px;height:34px;border-radius:8px;background:rgba(255,253,249,.92);place-items:center;cursor:grab;color:var(--ink-soft);font-size:18px;z-index:2}
+  .card .mvbtn{display:none}
+  .tools{flex-direction:row;align-items:center}
+  .tools .seg{flex:0 0 auto}
+  .tools .seg button{padding:0 18px}
+  .search{max-width:320px;margin-left:auto}
+  .formwrap{grid-template-columns:1fr 340px;align-items:start}
+  .formwrap .side{position:sticky;top:84px;display:grid;gap:18px}
+  .savebar{left:240px;bottom:0;padding-left:32px}
+  .savebar .btn{flex:0 0 auto}
+  .savebar .del{flex:0 0 auto;margin-left:auto}
+  .toast{bottom:90px}
+  .step .body{grid-template-columns:260px 1fr;align-items:start}
+  .inbox{max-width:760px}
+}
+@media (max-width:520px){
+  .logo .tag{display:none}
+  .who .zal{display:none}
+  .who{font-size:15px}
+  .seesite{padding:0 12px;font-size:14px}
+  h1{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="mockbar">Makieta panelu — zmiany nie są zapisywane</div>
+<header class="top">
+  <a class="logo" href="#" data-go="gallery" aria-label="skart – panel"><span class="sk">sk</span><span class="art">ART</span><span class="tag">panel</span></a>
+  <a class="seesite" href="index.html">Zobacz stronę</a>
+  <div class="who"><span class="av" aria-hidden="true">P</span><span><span class="zal">Zalogowana: </span><b>Pati</b></span></div>
+</header>
+
+<div class="layout">
+<nav class="nav" aria-label="Menu panelu">
+  <button data-go="gallery" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>Obrazy</span></button>
+  <button data-go="edit"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Dodaj</span></button>
+  <button data-go="process"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><span>Proces</span></button>
+  <button data-go="messages"><svg viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg><span>Wiadomości</span><b class="badge" id="badge" hidden>0</b></button>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<!-- GALERIA -->
+<section id="s-gallery">
+  <div class="head">
+    <div><h1>Twoje obrazy</h1><p class="lead" id="gcount"></p></div>
+    <button class="btn" id="addBtn">+ Dodaj obraz</button>
+  </div>
+  <div class="tools">
+    <div class="seg" id="filter" role="group" aria-label="Pokaż">
+      <button data-f="all" aria-pressed="true">Wszystkie</button>
+      <button data-f="Strukturalne" aria-pressed="false">Strukturalne</button>
+      <button data-f="Malowane" aria-pressed="false">Malowane</button>
+    </div>
+    <input class="search" id="q" type="search" placeholder="Szukaj po tytule…" aria-label="Szukaj obrazu po tytule" autocomplete="off">
+  </div>
+  <p class="hint" id="orderhint"></p>
+  <ul class="grid" id="grid"></ul>
+  <div class="empty" id="gempty" hidden>
+    <div class="sk">sk</div>
+    <p id="gemptytxt">Nic tu jeszcze nie ma.</p>
+    <button class="btn" id="gemptybtn">+ Dodaj pierwszy obraz</button>
+  </div>
+</section>
+
+<!-- EDYCJA -->
+<section id="s-edit" hidden>
+  <div class="head"><div><h1 id="etitle">Dodaj obraz</h1><p class="lead">Wypełnij to, co wiesz. Resztę możesz dopisać później.</p></div></div>
+  <form id="form" class="formwrap" novalidate>
+    <div>
+      <div class="panel">
+        <div class="field photo">
+          <span class="lbl">Zdjęcie obrazu</span>
+          <div class="box" id="pbox"><span>Brak zdjęcia.<br>Dotknij przycisku poniżej.</span></div>
+          <label class="btn ghost full" for="file" id="filelbl">Wybierz zdjęcie</label>
+          <input type="file" id="file" accept="image/*">
+          <span class="hint">Na telefonie możesz zrobić zdjęcie aparatem albo wybrać z galerii.</span>
+        </div>
+        <div class="field"><label for="f-title">Tytuł</label><input type="text" id="f-title" autocomplete="off" placeholder="np. Szron"><span class="hint" id="e-title" style="color:var(--sold)" hidden>Wpisz tytuł obrazu.</span></div>
+        <div class="field"><label for="f-tech">Technika</label><input type="text" id="f-tech" list="techs" autocomplete="off" placeholder="np. akryl, szpachla, płótno">
+          <datalist id="techs"><option value="akryl, pasta strukturalna, płótno"><option value="akryl, szpachla, płótno"><option value="olej, płótno"><option value="olej, szpachla"><option value="pasta strukturalna, akryl"><option value="gips akrylowy, relief"><option value="technika mieszana"></datalist></div>
+        <div class="field"><span class="lbl">Wymiar (cm)</span>
+          <div class="dims"><input type="number" inputmode="numeric" id="f-w" min="1" aria-label="Szerokość w centymetrach" placeholder="szer."><span aria-hidden="true">×</span><input type="number" inputmode="numeric" id="f-h" min="1" aria-label="Wysokość w centymetrach" placeholder="wys."></div></div>
+        <div class="field"><label for="f-year">Rok</label><input type="number" inputmode="numeric" id="f-year" min="1990" max="2100" placeholder="2025"></div>
+        <div class="field"><label for="f-cat">Rodzaj obrazu</label><select id="f-cat"><option>Strukturalne</option><option>Malowane</option></select></div>
+        <div class="field"><label for="f-desc">Opis (nieobowiązkowy)</label><textarea id="f-desc" placeholder="Kilka słów o obrazie…"></textarea></div>
+        <div class="field"><label for="f-status">Stan obrazu</label><select id="f-status"><option value="live">Na stronie</option><option value="hidden">Ukryta</option><option value="sold">Sprzedana</option></select></div>
+        <label class="switch"><input type="checkbox" id="f-home"><span class="track"></span><span>Pokaż na stronie głównej</span></label>
+      </div>
+    </div>
+    <div class="side">
+      <div class="preview"><h2>Tak to zobaczą goście</h2><div id="pv"></div><p class="note">Tak wygląda mała karta obrazu na Twojej stronie.</p></div>
+    </div>
+  </form>
+  <div class="savebar" id="savebar">
+    <button class="btn" id="saveBtn" type="button">Zapisz</button>
+    <button class="btn ghost" id="cancelBtn" type="button">Anuluj</button>
+    <button class="btn danger del" id="delBtn" type="button" hidden>Usuń obraz</button>
+    <div class="confirm" id="delConfirm" hidden>
+      <p id="delTxt"></p>
+      <button class="btn yes" id="delYes" type="button">Usuń</button>
+      <button class="btn no" id="delNo" type="button">Anuluj</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROCES -->
+<section id="s-process" hidden>
+  <div class="head"><div><h1>Proces twórczy</h1><p class="lead">Kroki, które goście zobaczą na stronie w tej kolejności.</p></div><button class="btn" id="addStep">+ Dodaj krok</button></div>
+  <ol class="steps" id="steps"></ol>
+  <div class="empty" id="pempty" hidden><div class="sk">sk</div><p>Nie ma jeszcze żadnego kroku.</p><button class="btn" id="addStep2">+ Dodaj pierwszy krok</button></div>
+  <div style="margin-top:18px"><button class="btn" id="saveSteps">Zapisz proces</button></div>
+</section>
+
+<!-- WIADOMOŚCI -->
+<section id="s-messages" hidden>
+  <div class="head"><div><h1>Wiadomości</h1><p class="lead">Pytania wysłane z formularza kontaktowego. To są <b>przykłady</b>.</p></div></div>
+  <ul class="inbox" id="inbox"></ul>
+  <div class="empty" id="mempty" hidden><div class="sk">sk</div><p>Skrzynka jest pusta. Gdy ktoś napisze, zobaczysz to tutaj.</p></div>
+</section>
+
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+
+var raw=[
+["praca-01","Szum","akryl, pasta strukturalna, płótno",80,80,2025],
+["praca-02","Szron","akryl, szpachla, płótno",60,80,2025],
+["praca-03","Zapiski","olej, płótno",50,70,2024],
+["praca-04","Len","pasta strukturalna, akryl",60,90,2025],
+["praca-05","Krata","technika mieszana",70,100,2024],
+["praca-06","Odwilż","akryl, szpachla",100,80,2025],
+["praca-07","Brzeg","akryl, pasta strukturalna",120,80,2025],
+["praca-09","Jesień w glinie","olej, szpachla",80,60,2024],
+["praca-10","Ochra","olej, szpachla",80,60,2024],
+["praca-11","Pastel","pasta strukturalna, akryl",40,60,2025],
+["praca-13","Biel","gips akrylowy, relief",50,90,2025],
+["praca-14","Żar","olej, szpachla",90,60,2024],
+["gory-01","Jezioro pod szczytem","olej, płótno",100,70,2023],
+["gory-02","Dolina","olej, płótno",100,70,2023]
+];
+var uid=100;
+var works=raw.map(function(r,i){
+  var mal=(r[0].indexOf("gory-")===0||r[0]==="praca-03");
+  return {id:i+1,img:"img/"+r[0]+".jpg",title:r[1],tech:r[2],w:r[3],h:r[4],year:r[5],cat:mal?"Malowane":"Strukturalne",desc:"",status:(r[1]==="Ochra"?"sold":(r[1]==="Żar"?"hidden":"live")),home:i<6};
+});
+var steps=[
+ {id:1,img:"img/proces-01-plotno.jpg",title:"Płótno",text:"Zaczynam od czystego płótna i szkicu w głowie, rzadko na papierze."},
+ {id:2,img:"img/proces-02-szpachle.jpg",title:"Narzędzia",text:"Szpachle, pędzle, pasta strukturalna. Każde narzędzie zostawia inny ślad."},
+ {id:3,img:"img/proces-03-farba.jpg",title:"Warstwy",text:"Nakładam farbę grubo, warstwa po warstwie. Część musi schnąć kilka dni."},
+ {id:4,img:"img/proces-04-sztaluga.jpg",title:"Światło",text:"Na końcu sprawdzam obraz w bocznym świetle — dopiero wtedy widać fakturę."}
+];
+var msgs=[
+ {id:1,name:"Marta Kowalska",email:"marta.kowalska@example.com",when:"Dziś, 09:12",unread:true,body:"Dzień dobry, bardzo podoba mi się obraz „Szron”. Czy jest jeszcze dostępny? Chętnie dowiem się o cenie i możliwości odbioru osobistego."},
+ {id:2,name:"Tomasz Wrona",email:"tomasz.wrona@example.com",when:"Wczoraj, 18:40",unread:true,body:"Cześć! Szukam dużego obrazu do salonu, najlepiej w beżach, ok. 120×80 cm. Czy możliwe jest zamówienie pracy na wymiar? Ile trwałoby wykonanie?"},
+ {id:3,name:"Agnieszka Lis",email:"agnieszka.lis@example.com",when:"3 dni temu",unread:false,body:"Dziękuję za odpowiedź! Obraz „Ochra” dotarł w całości, wisi już nad komodą i wygląda pięknie."}
+];
+
+var state={screen:"gallery",filter:"all",q:"",editId:null,tmpImg:null,tmpBlob:null};
+var isDesk=function(){return window.matchMedia("(min-width:900px)").matches};
+
+/* toast */
+var tt;function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(tt);tt=setTimeout(function(){e.hidden=true},2600)}
+
+/* navigation */
+function go(s,opts){
+  state.screen=s;
+  ["gallery","edit","process","messages"].forEach(function(n){$("#s-"+n).hidden=(n!==s)});
+  $$(".nav button").forEach(function(b){var on=b.dataset.go===((s==="edit"&&opts&&opts.id!=null)?"gallery":s);if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  if(!(opts&&opts.keepScroll))window.scrollTo(0,0);
+  if(s==="gallery")renderGallery();
+  if(s==="process")renderSteps();
+  if(s==="messages")renderMsgs();
+  if(s==="edit")openEdit(opts&&opts.id!=null?opts.id:null);
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-go]");if(!b)return;e.preventDefault();
+  go(b.dataset.go,b.dataset.go==="edit"?{id:null}:null);
+});
+
+/* gallery */
+var STAT={live:"Na stronie",hidden:"Ukryta",sold:"Sprzedana"};
+function cardHTML(w,idx,total,pv){
+  var up=(idx>0),dn=(idx<total-1);
+  var s='<div class="'+(pv?"card"+(w.status==="hidden"?" off":""):"")+'">';
+  return s;
+}
+function card(w,opts){
+  opts=opts||{};
+  var h='';
+  h+='<button type="button" class="thumb" '+(opts.pv?'tabindex="-1" ':'')+'data-edit="'+w.id+'" aria-label="Edytuj: '+esc(w.title)+'">'+(w.img?'<img src="'+esc(w.img)+'" alt="'+esc(w.title)+'" '+(opts.pv?'':'loading="lazy"')+' draggable="false">':'')+'</button>';
+  h+='<div class="info"><span class="t">'+esc(w.title||"Bez tytułu")+'</span><span class="y">'+(w.year?esc(w.year):"rok?")+(w.w&&w.h?" · "+esc(w.w)+"×"+esc(w.h)+" cm":"")+'</span><span class="pill '+w.status+'">'+STAT[w.status]+'</span></div>';
+  return h;
+}
+function renderGallery(){
+  var list=works.filter(function(w){
+    return (state.filter==="all"||w.cat===state.filter)&&(!state.q||w.title.toLowerCase().indexOf(state.q.toLowerCase())>-1);
+  });
+  var grid=$("#grid");
+  $("#gcount").textContent=works.length+" "+(works.length===1?"praca":"prac")+" · na stronie widocznych: "+works.filter(function(w){return w.status!=="hidden"}).length;
+  var canMove=(state.filter==="all"&&!state.q);
+  $("#orderhint").textContent=canMove?(isDesk()?"Chwyć kafelek za uchwyt i przeciągnij, żeby zmienić kolejność.":"Strzałkami ▲ ▼ zmieniasz kolejność obrazów na stronie."):"Kolejność zmienisz po wybraniu „Wszystkie” i wyczyszczeniu szukania.";
+  grid.innerHTML=list.map(function(w){
+    var idx=works.indexOf(w);
+    return '<li class="card" data-id="'+w.id+'"'+(canMove&&isDesk()?' draggable="true"':'')+'>'+
+      (canMove?'<span class="handle" aria-hidden="true">⠿</span>':'')+card(w)+
+      '<div class="actions"><button type="button" class="edit" data-edit="'+w.id+'">Edytuj</button>'+
+      (canMove?'<button type="button" class="mvbtn" data-mv="-1" data-id="'+w.id+'" aria-label="Przesuń '+esc(w.title)+' wcześniej"'+(idx===0?' disabled':'')+'>▲</button><button type="button" class="mvbtn" data-mv="1" data-id="'+w.id+'" aria-label="Przesuń '+esc(w.title)+' później"'+(idx===works.length-1?' disabled':'')+'>▼</button>':'')+
+      '</div></li>';
+  }).join("");
+  var empty=!list.length;
+  grid.hidden=empty;$("#gempty").hidden=!empty;
+  if(empty){
+    if(!works.length){$("#gemptytxt").textContent="Nie masz jeszcze żadnych obrazów.";$("#gemptybtn").hidden=false}
+    else{$("#gemptytxt").textContent=state.q?("Nie ma obrazu o tytule „"+state.q+"”."):"W tym rodzaju nie ma jeszcze obrazów.";$("#gemptybtn").hidden=false}
+  }
+}
+$("#filter").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  state.filter=b.dataset.f;
+  $$("#filter button").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
+  renderGallery();
+});
+$("#q").addEventListener("input",function(e){state.q=e.target.value.trim();renderGallery()});
+$("#addBtn").addEventListener("click",function(){go("edit",{id:null})});
+$("#gemptybtn").addEventListener("click",function(){go("edit",{id:null})});
+$("#grid").addEventListener("click",function(e){
+  var m=e.target.closest("[data-mv]");
+  if(m){
+    var id=+m.dataset.id,i=works.findIndex(function(w){return w.id===id}),j=i+(+m.dataset.mv);
+    if(j<0||j>=works.length)return;
+    var t=works[i];works[i]=works[j];works[j]=t;renderGallery();
+    var nb=$('[data-mv="'+m.dataset.mv+'"][data-id="'+id+'"]');if(nb&&!nb.disabled)nb.focus();
+    toast("Kolejność zmieniona");return;
+  }
+  var ed=e.target.closest("[data-edit]");
+  if(ed)go("edit",{id:+ed.dataset.edit});
+});
+/* drag & drop (desktop) */
+var dragId=null;
+var grid=$("#grid");
+grid.addEventListener("dragstart",function(e){var li=e.target.closest(".card");if(!li)return;dragId=+li.dataset.id;li.classList.add("dragging");try{e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",String(dragId))}catch(x){}});
+grid.addEventListener("dragover",function(e){if(dragId==null)return;e.preventDefault();var li=e.target.closest(".card");$$(".card.over").forEach(function(c){c.classList.remove("over")});if(li&&+li.dataset.id!==dragId)li.classList.add("over")});
+grid.addEventListener("dragend",function(){dragId=null;$$(".card.dragging,.card.over").forEach(function(c){c.classList.remove("dragging","over")})});
+grid.addEventListener("drop",function(e){
+  e.preventDefault();var li=e.target.closest(".card");if(!li||dragId==null)return;
+  var to=+li.dataset.id;if(to===dragId)return;
+  var from=works.findIndex(function(w){return w.id===dragId}),tp=works.findIndex(function(w){return w.id===to});
+  var it=works.splice(from,1)[0];works.splice(tp,0,it);dragId=null;renderGallery();toast("Kolejność zmieniona");
+});
+window.matchMedia("(min-width:900px)").addEventListener("change",function(){if(state.screen==="gallery")renderGallery()});
+
+/* edit */
+function cur(){return works.find(function(w){return w.id===state.editId})}
+function revoke(){if(state.tmpBlob){try{URL.revokeObjectURL(state.tmpBlob)}catch(x){}state.tmpBlob=null}}
+function openEdit(id){
+  revoke();state.editId=id;state.tmpImg=null;
+  var w=id==null?{img:"",title:"",tech:"",w:"",h:"",year:2026,cat:"Strukturalne",desc:"",status:"live",home:false}:cur();
+  $("#etitle").textContent=id==null?"Dodaj obraz":"Edytuj: "+w.title;
+  $("#f-title").value=w.title;$("#f-tech").value=w.tech;$("#f-w").value=w.w;$("#f-h").value=w.h;$("#f-year").value=w.year;
+  $("#f-cat").value=w.cat;$("#f-desc").value=w.desc;$("#f-status").value=w.status;$("#f-home").checked=w.home;
+  $("#file").value="";$("#e-title").hidden=true;
+  $("#delBtn").hidden=(id==null);$("#delConfirm").hidden=true;
+  $("#saveBtn").hidden=false;$("#cancelBtn").hidden=false;
+  setPhoto(w.img);updatePv();
+}
+function setPhoto(src){
+  var b=$("#pbox");
+  if(src){b.innerHTML='<img src="'+esc(src)+'" alt="Wybrane zdjęcie obrazu">';$("#filelbl").textContent="Zmień zdjęcie"}
+  else{b.innerHTML='<span>Brak zdjęcia.<br>Dotknij przycisku poniżej.</span>';$("#filelbl").textContent="Wybierz zdjęcie"}
+}
+function formData(){
+  var w=cur();
+  return {img:state.tmpImg!=null?state.tmpImg:(w?w.img:""),title:$("#f-title").value.trim(),tech:$("#f-tech").value.trim(),w:$("#f-w").value,h:$("#f-h").value,year:$("#f-year").value,cat:$("#f-cat").value,desc:$("#f-desc").value.trim(),status:$("#f-status").value,home:$("#f-home").checked};
+}
+function updatePv(){
+  var d=formData();
+  $("#pv").innerHTML='<div class="card'+(d.status==="hidden"?" off":"")+'">'+card(d,{pv:true})+'</div>'+(d.status==="hidden"?'<p class="note">Ta karta jest ukryta — goście jej nie zobaczą.</p>':'');
+}
+$("#form").addEventListener("input",updatePv);
+$("#form").addEventListener("change",updatePv);
+$("#form").addEventListener("submit",function(e){e.preventDefault()});
+$("#file").addEventListener("change",function(e){
+  var f=e.target.files&&e.target.files[0];if(!f)return;
+  revoke();
+  var url=null;try{url=URL.createObjectURL(f);state.tmpBlob=url}catch(x){}
+  if(url){state.tmpImg=url;setPhoto(url);updatePv()}
+  else{var r=new FileReader();r.onload=function(){state.tmpImg=r.result;setPhoto(r.result);updatePv()};r.readAsDataURL(f)}
+});
+$("#saveBtn").addEventListener("click",function(){
+  var d=formData();
+  if(!d.title){$("#e-title").hidden=false;$("#f-title").focus();return}
+  d.w=+d.w||"";d.h=+d.h||"";d.year=+d.year||"";
+  if(state.editId==null){d.id=++uid;works.push(d)}
+  else{var w=cur();Object.keys(d).forEach(function(k){w[k]=d[k]})}
+  state.tmpBlob=null; /* zdjęcie zostaje w pamięci makiety */
+  state.filter="all";state.q="";$("#q").value="";$$("#filter button").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.f==="all"?"true":"false")});
+  go("gallery");toast("Zapisano");
+});
+$("#cancelBtn").addEventListener("click",function(){revoke();go("gallery")});
+$("#delBtn").addEventListener("click",function(){
+  var w=cur();$("#delTxt").textContent="Usunąć „"+w.title+"”? Tego nie da się cofnąć.";
+  $("#delConfirm").hidden=false;$("#delBtn").hidden=true;$("#saveBtn").hidden=true;$("#cancelBtn").hidden=true;$("#delNo").focus();
+});
+$("#delNo").addEventListener("click",function(){$("#delConfirm").hidden=true;$("#delBtn").hidden=false;$("#saveBtn").hidden=false;$("#cancelBtn").hidden=false});
+$("#delYes").addEventListener("click",function(){
+  var t=cur().title;works=works.filter(function(w){return w.id!==state.editId});go("gallery");toast("Usunięto: "+t);
+});
+
+/* process */
+var pendingDel=null;
+function renderSteps(){
+  var ol=$("#steps");
+  ol.innerHTML=steps.map(function(s,i){
+    return '<li class="step" data-sid="'+s.id+'"><div class="sh"><span class="num" aria-hidden="true">'+(i+1)+'</span><strong>Krok '+(i+1)+'</strong><span class="mv"><button type="button" class="iconbtn" data-smv="-1" aria-label="Przesuń krok wyżej"'+(i===0?' disabled':'')+'>▲</button><button type="button" class="iconbtn" data-smv="1" aria-label="Przesuń krok niżej"'+(i===steps.length-1?' disabled':'')+'>▼</button></span></div>'+
+    '<div class="body"><div class="ph">'+(s.img?'<img src="'+esc(s.img)+'" alt="Zdjęcie do kroku: '+esc(s.title)+'" loading="lazy">':'<span class="none">brak zdjęcia</span>')+
+    '<div><label class="btn ghost sm" for="sf'+s.id+'">'+(s.img?"Zmień zdjęcie":"Dodaj zdjęcie")+'</label><input type="file" id="sf'+s.id+'" accept="image/*" data-sfile="'+s.id+'"></div></div>'+
+    '<div><div class="field"><label for="st'+s.id+'">Tytuł kroku</label><input type="text" id="st'+s.id+'" value="'+esc(s.title)+'" data-sfield="title" autocomplete="off"></div>'+
+    '<div class="field"><label for="sx'+s.id+'">Tekst</label><textarea id="sx'+s.id+'" data-sfield="text">'+esc(s.text)+'</textarea></div></div></div>'+
+    '<div class="foot">'+(pendingDel===s.id?'<div class="confirm inlineconfirm" style="flex:1"><p>Usunąć krok „'+esc(s.title||"bez tytułu")+'”?</p><button class="btn yes" type="button" data-sdelyes>Usuń</button><button class="btn no" type="button" data-sdelno>Anuluj</button></div>':'<button type="button" class="btn danger sm" data-sdel>Usuń krok</button>')+'</div></li>';
+  }).join("");
+  $("#pempty").hidden=steps.length>0;ol.hidden=!steps.length;
+}
+function stepOf(el){var li=el.closest(".step");return li&&steps.find(function(s){return s.id===+li.dataset.sid})}
+$("#steps").addEventListener("input",function(e){var s=stepOf(e.target),f=e.target.dataset.sfield;if(s&&f)s[f]=e.target.value});
+$("#steps").addEventListener("change",function(e){
+  var id=e.target.dataset.sfile;if(!id)return;var f=e.target.files&&e.target.files[0];if(!f)return;
+  var s=steps.find(function(x){return x.id===+id});try{s.img=URL.createObjectURL(f);renderSteps();toast("Zdjęcie dodane")}catch(x){}
+});
+$("#steps").addEventListener("click",function(e){
+  var s=stepOf(e.target);if(!s)return;var i=steps.indexOf(s);
+  var m=e.target.closest("[data-smv]");
+  if(m){var j=i+(+m.dataset.smv);if(j<0||j>=steps.length)return;steps[i]=steps[j];steps[j]=s;renderSteps();
+    var nl=$$(".step")[j];var nb=nl&&nl.querySelector('[data-smv="'+m.dataset.smv+'"]');if(nb&&!nb.disabled)nb.focus();return}
+  if(e.target.closest("[data-sdel]")){pendingDel=s.id;renderSteps();return}
+  if(e.target.closest("[data-sdelno]")){pendingDel=null;renderSteps();return}
+  if(e.target.closest("[data-sdelyes]")){steps.splice(i,1);pendingDel=null;renderSteps();toast("Krok usunięty")}
+});
+function addStep(){steps.push({id:++uid,img:"",title:"",text:""});renderSteps();var l=$$(".step");var last=l[l.length-1];if(last){last.scrollIntoView({block:"center"});var i=last.querySelector("input[type=text]");if(i)i.focus({preventScroll:true})}toast("Dodano nowy krok")}
+$("#addStep").addEventListener("click",addStep);$("#addStep2").addEventListener("click",addStep);
+$("#saveSteps").addEventListener("click",function(){toast("Zapisano")});
+
+/* messages */
+var openMsg=null;
+function renderMsgs(){
+  var ul=$("#inbox");
+  ul.innerHTML=msgs.map(function(m){
+    var o=openMsg===m.id;
+    return '<li class="msg'+(m.unread?" unread":"")+'" data-mid="'+m.id+'"><button type="button" aria-expanded="'+o+'" data-open><span class="dot" aria-hidden="true"></span><span class="m"><span class="from"><span>'+esc(m.name)+'<span class="ex">przykład</span></span><span class="when">'+esc(m.when)+'</span></span><span class="sub" style="display:block">'+(m.unread?"Nowa · ":"")+esc(m.body)+'</span></span></button>'+
+    (o?'<div class="detail"><p>'+esc(m.body)+'</p><div class="copybox" id="cb'+m.id+'"><button type="button" class="btn sm" data-reply>Odpowiedz</button></div>'+
+       '<p style="margin:12px 0 0"><button type="button" class="btn ghost sm" data-toggle>'+(m.unread?"Oznacz jako przeczytaną":"Oznacz jako nieprzeczytaną")+'</button></p></div>':'')+'</li>';
+  }).join("");
+  ul.hidden=!msgs.length;$("#mempty").hidden=msgs.length>0;
+  var n=msgs.filter(function(m){return m.unread}).length;var b=$("#badge");b.textContent=n;b.hidden=!n;
+}
+$("#inbox").addEventListener("click",function(e){
+  var li=e.target.closest(".msg");if(!li)return;var m=msgs.find(function(x){return x.id===+li.dataset.mid});
+  if(e.target.closest("[data-open]")){if(openMsg===m.id)openMsg=null;else{openMsg=m.id;m.unread=false}renderMsgs();return}
+  if(e.target.closest("[data-toggle]")){m.unread=!m.unread;if(m.unread)openMsg=null;renderMsgs();return}
+  if(e.target.closest("[data-reply]")){
+    var box=$("#cb"+m.id);
+    box.innerHTML='<code id="em'+m.id+'">'+esc(m.email)+'</code><button type="button" class="btn sm" data-copy>Kopiuj adres</button>';
+    return;
+  }
+  if(e.target.closest("[data-copy]")){
+    var code=$("#em"+m.id),txt=m.email,done=function(){toast("Adres skopiowany")};
+    var fb=function(){try{var r=document.createRange();r.selectNodeContents(code);var s=window.getSelection();s.removeAllRanges();s.addRange(r);var ok=document.execCommand&&document.execCommand("copy");toast(ok?"Adres skopiowany":"Zaznaczono adres — przytrzymaj i wybierz Kopiuj")}catch(x){toast("Zaznacz adres i skopiuj go")}};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb)}else fb();
+  }
+});
+
+renderGallery();renderMsgs();
+})();
+</script>
+</body>
+</html>
