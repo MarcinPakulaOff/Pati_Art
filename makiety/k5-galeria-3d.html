@@ -597,7 +597,7 @@ function resize(){
   renderer.setSize(w,h,false);
   camera.aspect=w/h;
   narrow=camera.aspect<.85;DSTOP=narrow?1.6:2.0;buildStops();readScroll();
-  camera.fov=narrow?70:58;
+  camera.fov=narrow?58:58;
   camera.updateProjectionMatrix();need();
 }
 if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
@@ -640,7 +640,7 @@ function frame(now){
     var b=sm(1-Math.abs(curZ-(P[i].z+DSTOP))/wd);
     yaw+=-P[i].sx*b;shift+=-P[i].sx*b;
   }
-  var shMax=narrow?.7:.5,lat=W/2+shMax,yawMax=.88*Math.atan2(lat,DSTOP);
+  var shMax=narrow?.7:.5,lat=W/2+shMax,yawMax=(narrow?.98:.88)*Math.atan2(lat,DSTOP);
   var endFade=1-sm((progress-.955)/.04);
   yaw*=yawMax*endFade;shift*=shMax;
   camera.position.set(shift,1.6+Math.sin(curZ*1.7)*(reduce?0:.008),curZ);
