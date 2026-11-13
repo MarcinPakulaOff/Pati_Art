@@ -1,0 +1,461 @@
+<!doctype html>
+<!--
+  KONCEPCJA 3 — „Magazyn”.
+  Strona jak okładka i rozkładówki pisma o sztuce: ogromna kontrastowa antykwa „skart” przycięta krawędzią ekranu jest główną dekoracją,
+  sekcje na przemian jasne i w kolorze umbry, galeria łamana asymetrycznie z numerami „Nr 07”. Jeden akcent: ochra.
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>skart — Magazyn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,600&family=Manrope:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  --umbra:#2a1c14; --umbra-2:#3a291d; --umbra-3:#53402f;
+  --ivory:#f3ebdd; --ivory-2:#e7dcc7; --ivory-3:#cdbfa5;
+  --ochre:#c28a36; --ochre-dk:#8a5a17;
+  --serif:'Bodoni Moda','Bodoni 72','Didot','Playfair Display','Times New Roman',serif;
+  --sans:'Manrope','DM Sans','Helvetica Neue',Arial,sans-serif;
+  --script:'Pinyon Script','Snell Roundhand','Apple Chancery','Brush Script MT',cursive;
+  --gut:max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  --bar:56px;
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip;-webkit-text-size-adjust:100%}
+body{background:var(--ivory);color:var(--umbra);font-family:var(--sans);font-weight:400;line-height:1.65;font-size:1rem;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ochre);outline-offset:3px}
+.wrap{padding-inline:max(var(--gut), 3vw)}
+section[id]{scroll-margin-top:var(--bar)}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
+.eyebrow b{color:var(--ochre);font-weight:600;margin-right:.9em}
+
+/* ===== pasek ===== */
+.bar{position:fixed;inset:0 0 auto 0;height:var(--bar);z-index:50;display:flex;align-items:center;justify-content:space-between;padding-inline:max(var(--gut),3vw);background:rgba(42,28,20,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ivory);border-bottom:1px solid rgba(243,235,221,.14)}
+.bar .sig{font-family:var(--script);font-size:2rem;line-height:1;text-decoration:none;display:flex;align-items:center;min-height:44px;padding-right:.5rem}
+.bar nav ul{display:flex;gap:2.4rem;list-style:none}
+.bar nav a{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;font-weight:500;display:inline-flex;align-items:center;min-height:44px;position:relative}
+.bar nav a::after{content:"";position:absolute;left:0;right:0;bottom:9px;height:1px;background:var(--ochre);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.bar nav a:hover::after{transform:scaleX(1)}
+.burger{display:none;width:44px;height:44px;position:relative;margin-right:-10px}
+.burger span{position:absolute;left:11px;right:11px;height:1.5px;background:var(--ivory);transition:transform .3s,opacity .2s}
+.burger span:nth-child(1){top:16px}.burger span:nth-child(2){top:21px}.burger span:nth-child(3){top:26px}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+.overlay{position:fixed;inset:0;z-index:45;background:var(--umbra);color:var(--ivory);display:none;flex-direction:column;justify-content:center;padding:calc(var(--bar) + 1rem) max(var(--gut),6vw) 2rem}
+.overlay.open{display:flex}
+.overlay a{display:flex;align-items:baseline;gap:1rem;font-family:var(--serif);font-style:italic;font-size:clamp(2.4rem,11vw,3.6rem);line-height:1.1;text-decoration:none;padding:.55rem 0;border-bottom:1px solid rgba(243,235,221,.16);min-height:44px}
+.overlay a small{font-family:var(--sans);font-style:normal;font-size:.7rem;letter-spacing:.2em;color:var(--ochre);width:2rem}
+.overlay p{margin-top:2rem;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ivory-3)}
+.back{position:fixed;left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom));z-index:40;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;background:rgba(42,28,20,.78);color:var(--ivory);padding:0 14px;min-height:44px;display:inline-flex;align-items:center;border:1px solid rgba(243,235,221,.25)}
+.back:hover{background:var(--umbra)}
+
+/* ===== hero ===== */
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:var(--umbra);color:var(--ivory);display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--bar) + 1.6rem) max(var(--gut),3vw) 0}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(42,28,20,.55) 0%,rgba(42,28,20,.12) 40%,rgba(42,28,20,.6) 100%)}
+.hero>*:not(img){position:relative;z-index:2}
+.cover-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.issue{font-size:.74rem;letter-spacing:.26em;text-transform:uppercase;font-weight:500;line-height:1.7}
+.issue b{display:block;font-family:var(--script);font-weight:400;font-size:3rem;letter-spacing:0;text-transform:none;color:var(--ochre);line-height:1}
+.motto{max-width:23ch;margin-left:auto;font-size:.95rem;line-height:1.6;text-align:right;font-weight:300}
+.motto::before{content:"";display:block;width:3rem;height:1px;background:var(--ochre);margin:0 0 .9rem auto}
+.mast{font-family:var(--serif);font-weight:900;font-size:39.5vw;line-height:.74;letter-spacing:-.05em;white-space:nowrap;margin:0 0 -.07em -1.2vw;color:var(--ivory);will-change:transform;transform:translateX(var(--px,0px));user-select:none}
+.mast span{font-style:italic;font-weight:400}
+
+/* ===== o mnie ===== */
+.about{background:var(--ivory);padding:clamp(5rem,12vw,10rem) 0 clamp(4rem,9vw,8rem)}
+.about .eyebrow{margin-bottom:2rem;color:var(--ochre-dk)}
+.about blockquote{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,7.4vw,7rem);line-height:1.02;letter-spacing:-.02em;max-width:15ch}
+.about blockquote em{font-style:italic;color:var(--ochre-dk)}
+.about-body{display:grid;grid-template-columns:repeat(12,1fr);gap:0 2rem;margin-top:clamp(3rem,7vw,6rem);align-items:start}
+.about-text{grid-column:1 / span 7;column-count:2;column-gap:2.4rem;font-size:1.02rem;max-width:62ch}
+.about-text p{break-inside:avoid-column}
+.about-text p:first-child::first-letter{font-family:var(--serif);font-size:3.6em;float:left;line-height:.82;padding:.08em .1em 0 0;color:var(--ochre-dk);font-weight:700}
+.about-side{grid-column:9 / span 4;margin-top:-6rem}
+.about-side img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.about-side figcaption{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-top:.7rem;color:var(--umbra-3)}
+.about .sign{margin-top:2rem;font-family:var(--script);font-size:3rem;line-height:1;color:var(--ochre-dk)}
+
+/* ===== galeria ===== */
+.gallery{background:var(--umbra);color:var(--ivory);padding:clamp(4.5rem,10vw,9rem) 0}
+.g-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem 3rem;margin-bottom:clamp(2.5rem,6vw,5rem)}
+.g-head h2{font-family:var(--serif);font-weight:900;font-size:clamp(4.2rem,15vw,14rem);line-height:.8;letter-spacing:-.04em;margin-left:-.05em}
+.g-head h2 i{font-weight:400}
+.g-side{max-width:30ch}
+.g-side .eyebrow{color:var(--ochre);margin-bottom:.6rem}
+.g-side p{font-size:.95rem;color:var(--ivory-3);font-weight:300}
+.filters{display:flex;gap:.4rem 1.6rem;flex-wrap:wrap;margin:1.2rem 0 0}
+.filters button{min-height:44px;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ivory-3);border-bottom:1px solid transparent;padding:0 .1rem}
+.filters button[aria-pressed="true"]{color:var(--ivory);border-bottom-color:var(--ochre)}
+.filters button:hover{color:var(--ivory)}
+.spread{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(2.2rem,5vw,4.5rem) clamp(1rem,2.2vw,2.2rem);align-items:start}
+.work{grid-column:var(--c,span 4);margin-top:var(--mt,0)}
+.work[hidden]{display:none}
+.work button.open{display:block;width:100%;position:relative;overflow:hidden;background:var(--umbra-2);cursor:zoom-in}
+.work img{width:100%;height:auto;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.work button.open:hover img{transform:scale(1.035)}
+.work figcaption{display:grid;grid-template-columns:auto 1fr;gap:.1rem 1rem;margin-top:.9rem;align-items:baseline}
+.no{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ochre);font-weight:600;grid-row:span 2}
+.t{font-family:var(--serif);font-style:italic;font-size:1.5rem;line-height:1.15}
+.m{font-size:.78rem;color:var(--ivory-3);font-weight:300;line-height:1.5}
+.g-note{margin-top:clamp(3rem,6vw,5rem);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ivory-3)}
+
+/* ===== na scianie ===== */
+.wall{position:relative;min-height:min(92svh,860px);overflow:hidden;color:var(--ivory);display:flex;align-items:flex-end;background:var(--umbra)}
+.wall>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wall::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(42,28,20,.82) 0%,rgba(42,28,20,.15) 62%,rgba(42,28,20,0) 100%)}
+.wall-in{position:relative;padding:6rem max(var(--gut),3vw) clamp(2.5rem,6vw,5rem);max-width:1180px}
+.wall .eyebrow{color:var(--ochre);margin-bottom:1.2rem}
+.wall q{display:block;quotes:none;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(2.1rem,5.6vw,5.4rem);line-height:1.08;letter-spacing:-.015em}
+.wall cite{display:block;margin-top:1.4rem;font-style:normal;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory-2)}
+
+/* ===== proces ===== */
+.process{background:var(--ivory);padding:clamp(4.5rem,10vw,9rem) 0}
+.p-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.5rem 3rem;margin-bottom:clamp(3rem,7vw,6rem)}
+.p-head h2{font-family:var(--serif);font-weight:900;font-size:clamp(3.4rem,11vw,10.5rem);line-height:.82;letter-spacing:-.04em;margin-left:-.04em}
+.p-head h2 i{font-weight:400;color:var(--ochre-dk)}
+.p-head p{max-width:30ch;font-size:.95rem;color:var(--umbra-3)}
+.step{display:grid;grid-template-columns:repeat(12,1fr);gap:0 clamp(1rem,2.4vw,2.4rem);align-items:center;margin-bottom:clamp(3.5rem,8vw,7rem)}
+.step figure{grid-column:1 / span 7;position:relative}
+.step figure img{width:100%;height:clamp(300px,42vw,620px);object-fit:cover}
+.step .txt{grid-column:8 / span 5;position:relative}
+.step:nth-of-type(even) figure{grid-column:6 / span 7;order:2}
+.step:nth-of-type(even) .txt{grid-column:1 / span 5;order:1;text-align:left}
+.step:nth-of-type(even) figure img{height:clamp(300px,38vw,560px)}
+.num{display:block;font-family:var(--serif);font-weight:900;font-size:clamp(7rem,17vw,16rem);line-height:.78;letter-spacing:-.05em;color:var(--ochre);margin-left:-.04em}
+.step h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.1;margin:.4rem 0 .8rem}
+.step p{font-size:1.02rem;max-width:34ch;color:var(--umbra-3)}
+
+/* ===== kontakt ===== */
+.contact{background:var(--umbra);color:var(--ivory);padding:clamp(4.5rem,10vw,9rem) 0 0;overflow:hidden;position:relative}
+.contact h2{font-family:var(--serif);font-weight:900;font-size:clamp(5rem,23vw,22rem);line-height:.78;letter-spacing:-.05em;margin-left:-.05em;white-space:nowrap}
+.contact h2 i{font-weight:400;color:var(--ochre)}
+.c-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:3rem 2rem;margin-top:clamp(2.5rem,6vw,5rem)}
+.c-info{grid-column:1 / span 5}
+.c-info .lead{font-family:var(--serif);font-style:italic;font-size:clamp(1.5rem,2.4vw,2.2rem);line-height:1.25}
+.c-list{margin-top:2rem;list-style:none;display:grid;gap:1.2rem}
+.c-list span{display:block;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ochre);margin-bottom:.2rem}
+.c-list b{font-weight:500;font-size:1.15rem;user-select:all;-webkit-user-select:all;word-break:break-all}
+form{grid-column:7 / span 6;display:grid;gap:1.4rem}
+.f{display:grid;gap:.2rem}
+.f label{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ivory-3)}
+.f input,.f textarea{font:inherit;font-size:1rem;color:var(--ivory);background:transparent;border:0;border-bottom:1px solid var(--umbra-3);border-radius:0;padding:.7rem 0;min-height:44px;width:100%;-webkit-appearance:none}
+.f textarea{min-height:120px;resize:vertical}
+.f input:focus,.f textarea:focus{outline:0;border-bottom-color:var(--ochre)}
+.f input:focus-visible,.f textarea:focus-visible{outline:2px solid var(--ochre);outline-offset:2px}
+.send{justify-self:start;min-height:48px;padding:0 2.2rem;background:var(--ochre);color:var(--umbra);font-size:.76rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+.send:hover{background:var(--ivory)}
+.status{min-height:1.6em;font-size:.92rem;color:var(--ochre)}
+footer{margin-top:clamp(3.5rem,8vw,7rem);border-top:1px solid rgba(243,235,221,.16);padding:1.6rem max(var(--gut),3vw) calc(5rem + env(safe-area-inset-bottom));font-size:.78rem;color:var(--ivory-3);display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem}
+
+/* ===== lightbox ===== */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(26,16,10,.96);display:none;flex-direction:column;color:var(--ivory);touch-action:pan-y}
+.lb.open{display:flex}
+.lb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:calc(56px + env(safe-area-inset-top)) max(var(--gut),64px) 0}
+.lb-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.lb-cap{padding:1rem max(var(--gut),3vw) calc(1.2rem + env(safe-area-inset-bottom));text-align:left;display:flex;flex-wrap:wrap;gap:.2rem 1.4rem;align-items:baseline}
+.lb-cap .t{font-size:1.7rem}
+.lb-btn{position:absolute;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(243,235,221,.3);background:rgba(42,28,20,.6);font-size:1.4rem;line-height:1;z-index:2}
+.lb-btn:hover{background:var(--ochre);color:var(--umbra)}
+.lb-x{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right))}
+.lb-p{left:max(8px,env(safe-area-inset-left));top:50%;margin-top:-48px}
+.lb-n{right:max(8px,env(safe-area-inset-right));top:50%;margin-top:-48px}
+
+/* ===== tablet / telefon ===== */
+@media (max-width:900px){
+  .bar nav{display:none}.burger{display:block}
+  .about-text{grid-column:1 / -1;column-count:1}
+  .about-side{grid-column:5 / -1;margin-top:3rem}
+  .c-info,form{grid-column:1 / -1}
+  .step figure,.step:nth-of-type(even) figure{grid-column:1 / -1;order:0}
+  .step .txt,.step:nth-of-type(even) .txt{grid-column:1 / -1;order:1;margin-top:1.2rem}
+  .step figure img,.step:nth-of-type(even) figure img{height:auto;aspect-ratio:4/3}
+  .num{font-size:clamp(7rem,32vw,12rem);margin-bottom:.3rem}
+  .spread{grid-template-columns:1fr;gap:2.6rem}
+  .work{grid-column:1 / -1;margin-top:0;width:100%}
+  .work:nth-child(even){width:84%;margin-left:auto}
+  .work:nth-child(3n){width:68%}
+  .issue b{font-size:2.4rem}
+  .motto{font-size:.88rem}
+  .hero{padding-bottom:3.6rem}
+  .mast{font-size:39.5vw;margin-left:-1.2vw;margin-bottom:0}
+  .lb-stage{padding-inline:var(--gut)}
+  .lb-p,.lb-n{top:auto;bottom:calc(5.2rem + env(safe-area-inset-bottom));margin:0}
+  .lb-p{left:max(10px,env(safe-area-inset-left))}.lb-n{right:max(10px,env(safe-area-inset-right))}
+}
+@media (max-width:520px){
+  .about blockquote{font-size:clamp(2.4rem,11.5vw,3.4rem)}
+  .about-side{grid-column:3 / -1}
+  .t{font-size:1.4rem}
+  .back{font-size:.64rem;padding:0 11px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+  .mast{transform:none!important}
+}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">&larr; Wszystkie koncepcje</a>
+
+<header class="bar">
+  <a class="sig" href="#top" aria-label="skart — początek strony">sk</a>
+  <nav aria-label="Główne">
+    <ul>
+      <li><a href="#o-mnie">O mnie</a></li>
+      <li><a href="#galeria">Galeria</a></li>
+      <li><a href="#proces">Proces twórczy</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+  <button class="burger" id="burger" aria-expanded="false" aria-controls="overlay" aria-label="Otwórz menu"><span></span><span></span><span></span></button>
+</header>
+
+<div class="overlay" id="overlay" aria-label="Menu">
+  <a href="#o-mnie"><small>01</small>O mnie</a>
+  <a href="#galeria"><small>02</small>Galeria</a>
+  <a href="#proces"><small>03</small>Proces twórczy</a>
+  <a href="#kontakt"><small>04</small>Kontakt</a>
+  <p>Wydanie 01 · 2026</p>
+</div>
+
+<main id="top">
+<section class="hero" aria-label="Okładka">
+  <img src="img/praca-10.jpg" alt="Makro faktury farby olejnej nakładanej szpachlą, w tonach ochry i brązu" width="1400" height="1050" fetchpriority="high">
+  <div class="cover-top">
+    <div class="issue"><b>sk</b>Wydanie 01 · 2026<br>Obrazy strukturalne i malowane</div>
+  </div>
+  <p class="motto">„Nie każda historia wymaga słów. Niektóre znajdują swój wyraz w sztuce.”</p>
+  <h1 class="mast" id="mast" aria-label="skart">skart</h1>
+</section>
+
+<section class="about" id="o-mnie">
+  <div class="wrap">
+    <p class="eyebrow"><b>01</b>O mnie</p>
+    <blockquote>Maluję obrazy, które chce się <em>dotknąć.</em></blockquote>
+    <div class="about-body">
+      <div class="about-text">
+        <p>Pracuję szpachlą i pędzlem, warstwa po warstwie, aż farba zacznie rzucać własny cień.</p>
+        <p>Tworzę obrazy strukturalne i klasyczne płótna — pejzaże, abstrakcje, światło. Każdy powstaje ręcznie, w jednym egzemplarzu.</p>
+        <p class="sign">— Patrycja</p>
+      </div>
+      <figure class="about-side">
+        <img src="img/proces-paleta.jpg" alt="Paleta z grubymi warstwami farby i pędzel" width="1050" height="1400" loading="lazy">
+        <figcaption>Paleta, pracownia</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="galeria">
+  <div class="wrap">
+    <div class="g-head">
+      <h2>Gale<i>ria</i></h2>
+      <div class="g-side">
+        <p class="eyebrow"><b>02</b>Prace</p>
+        <p>Czternaście obrazów, każdy w jednym egzemplarzu. Kliknij, żeby obejrzeć z bliska.</p>
+        <div class="filters" role="group" aria-label="Filtr galerii">
+          <button type="button" data-f="all" aria-pressed="true">Wszystkie</button>
+          <button type="button" data-f="struk" aria-pressed="false">Strukturalne</button>
+          <button type="button" data-f="mal" aria-pressed="false">Malowane</button>
+        </div>
+      </div>
+    </div>
+    <div class="spread" id="spread">
+      <figure class="work" data-cat="struk" data-no="Nr 07" data-title="Brzeg" data-tech="akryl, pasta strukturalna" data-dim="120×80 cm" data-year="2025" style="--c:span 8;--mt:0">
+        <button class="open" type="button" data-src="img/praca-07.jpg" data-alt="Obraz strukturalny z falistym reliefem farby" aria-label="Powiększ: Brzeg"><img src="img/praca-07.jpg" alt="Obraz strukturalny z falistym reliefem farby" width="1400" height="933" loading="lazy"></button>
+        <figcaption><span class="no">Nr 07</span><i class="t">Brzeg</i><span class="m">akryl, pasta strukturalna · 120×80 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 02" data-title="Szron" data-tech="akryl, szpachla, płótno" data-dim="60×80 cm" data-year="2025" style="--c:span 4;--mt:11vw">
+        <button class="open" type="button" data-src="img/praca-02.jpg" data-alt="Szron — biało-szare warstwy szpachli na płótnie" aria-label="Powiększ: Szron"><img src="img/praca-02.jpg" alt="Szron — biało-szare warstwy szpachli na płótnie" width="1050" height="1400" loading="lazy"></button>
+        <figcaption><span class="no">Nr 02</span><i class="t">Szron</i><span class="m">akryl, szpachla, płótno · 60×80 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 01" data-title="Szum" data-tech="akryl, pasta strukturalna, płótno" data-dim="80×80 cm" data-year="2025" style="--c:span 5;--mt:0">
+        <button class="open" type="button" data-src="img/praca-01.jpg" data-alt="Szum — kwadratowy obraz z gęstą fakturą pasty" aria-label="Powiększ: Szum"><img src="img/praca-01.jpg" alt="Szum — kwadratowy obraz z gęstą fakturą pasty" width="1400" height="1391" loading="lazy"></button>
+        <figcaption><span class="no">Nr 01</span><i class="t">Szum</i><span class="m">akryl, pasta strukturalna, płótno · 80×80 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="mal" data-no="Nr 03" data-title="Zapiski" data-tech="olej, płótno" data-dim="50×70 cm" data-year="2024" style="--c:span 4;--mt:6vw">
+        <button class="open" type="button" data-src="img/praca-03.jpg" data-alt="Zapiski — olejny obraz w pionie" aria-label="Powiększ: Zapiski"><img src="img/praca-03.jpg" alt="Zapiski — olejny obraz w pionie" width="931" height="1400" loading="lazy"></button>
+        <figcaption><span class="no">Nr 03</span><i class="t">Zapiski</i><span class="m">olej, płótno · 50×70 cm · 2024</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 11" data-title="Pastel" data-tech="pasta strukturalna, akryl" data-dim="40×60 cm" data-year="2025" style="--c:span 3;--mt:14vw">
+        <button class="open" type="button" data-src="img/praca-11.jpg" data-alt="Pastel — jasny obraz strukturalny" aria-label="Powiększ: Pastel"><img src="img/praca-11.jpg" alt="Pastel — jasny obraz strukturalny" width="933" height="1400" loading="lazy"></button>
+        <figcaption><span class="no">Nr 11</span><i class="t">Pastel</i><span class="m">pasta strukturalna, akryl · 40×60 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="mal" data-no="Nr 15" data-title="Jezioro pod szczytem" data-tech="olej, płótno" data-dim="100×70 cm" data-year="2023" style="--c:span 6;--mt:0">
+        <button class="open" type="button" data-src="img/gory-01.jpg" data-alt="Jezioro pod szczytem — malowany pejzaż górski" aria-label="Powiększ: Jezioro pod szczytem"><img src="img/gory-01.jpg" alt="Jezioro pod szczytem — malowany pejzaż górski" width="1400" height="924" loading="lazy"></button>
+        <figcaption><span class="no">Nr 15</span><i class="t">Jezioro pod szczytem</i><span class="m">olej, płótno · 100×70 cm · 2023</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 13" data-title="Biel" data-tech="gips akrylowy, relief" data-dim="50×90 cm" data-year="2025" style="--c:span 3;--mt:8vw">
+        <button class="open" type="button" data-src="img/praca-13.jpg" data-alt="Biel — biały relief z gipsu akrylowego" aria-label="Powiększ: Biel"><img src="img/praca-13.jpg" alt="Biel — biały relief z gipsu akrylowego" width="787" height="1400" loading="lazy"></button>
+        <figcaption><span class="no">Nr 13</span><i class="t">Biel</i><span class="m">gips akrylowy, relief · 50×90 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 04" data-title="Len" data-tech="pasta strukturalna, akryl" data-dim="60×90 cm" data-year="2025" style="--c:span 3;--mt:0">
+        <button class="open" type="button" data-src="img/praca-04.jpg" data-alt="Len — faktura przypominająca tkaninę" aria-label="Powiększ: Len"><img src="img/praca-04.jpg" alt="Len — faktura przypominająca tkaninę" width="933" height="1400" loading="lazy"></button>
+        <figcaption><span class="no">Nr 04</span><i class="t">Len</i><span class="m">pasta strukturalna, akryl · 60×90 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 09" data-title="Jesień w glinie" data-tech="olej, szpachla" data-dim="80×60 cm" data-year="2024" style="--c:span 5;--mt:0">
+        <button class="open" type="button" data-src="img/praca-09.jpg" data-alt="Jesień w glinie — obraz w tonach ziemi" aria-label="Powiększ: Jesień w glinie"><img src="img/praca-09.jpg" alt="Jesień w glinie — obraz w tonach ziemi" width="1400" height="1050" loading="lazy"></button>
+        <figcaption><span class="no">Nr 09</span><i class="t">Jesień w glinie</i><span class="m">olej, szpachla · 80×60 cm · 2024</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 10" data-title="Ochra" data-tech="olej, szpachla" data-dim="80×60 cm" data-year="2024" style="--c:span 7;--mt:5vw">
+        <button class="open" type="button" data-src="img/praca-10.jpg" data-alt="Ochra — obraz w ciepłych tonach ochry" aria-label="Powiększ: Ochra"><img src="img/praca-10.jpg" alt="Ochra — obraz w ciepłych tonach ochry" width="1400" height="1050" loading="lazy"></button>
+        <figcaption><span class="no">Nr 10</span><i class="t">Ochra</i><span class="m">olej, szpachla · 80×60 cm · 2024</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 06" data-title="Odwilż" data-tech="akryl, szpachla" data-dim="100×80 cm" data-year="2025" style="--c:span 5;--mt:0">
+        <button class="open" type="button" data-src="img/praca-06.jpg" data-alt="Odwilż — warstwy szpachli w chłodnych odcieniach" aria-label="Powiększ: Odwilż"><img src="img/praca-06.jpg" alt="Odwilż — warstwy szpachli w chłodnych odcieniach" width="1400" height="1077" loading="lazy"></button>
+        <figcaption><span class="no">Nr 06</span><i class="t">Odwilż</i><span class="m">akryl, szpachla · 100×80 cm · 2025</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 05" data-title="Krata" data-tech="technika mieszana" data-dim="70×100 cm" data-year="2024" style="--c:span 3;--mt:7vw">
+        <button class="open" type="button" data-src="img/praca-05.jpg" data-alt="Krata — technika mieszana, kratowy układ" aria-label="Powiększ: Krata"><img src="img/praca-05.jpg" alt="Krata — technika mieszana, kratowy układ" width="1025" height="1400" loading="lazy"></button>
+        <figcaption><span class="no">Nr 05</span><i class="t">Krata</i><span class="m">technika mieszana · 70×100 cm · 2024</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="struk" data-no="Nr 14" data-title="Żar" data-tech="olej, szpachla" data-dim="90×60 cm" data-year="2024" style="--c:span 4;--mt:3vw">
+        <button class="open" type="button" data-src="img/praca-14.jpg" data-alt="Żar — obraz w czerwieniach i brązach" aria-label="Powiększ: Żar"><img src="img/praca-14.jpg" alt="Żar — obraz w czerwieniach i brązach" width="1400" height="933" loading="lazy"></button>
+        <figcaption><span class="no">Nr 14</span><i class="t">Żar</i><span class="m">olej, szpachla · 90×60 cm · 2024</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="mal" data-no="Nr 16" data-title="Dolina" data-tech="olej, płótno" data-dim="100×70 cm" data-year="2023" style="--c:span 8;--mt:0">
+        <button class="open" type="button" data-src="img/gory-02.jpg" data-alt="Dolina — malowany pejzaż górski" aria-label="Powiększ: Dolina"><img src="img/gory-02.jpg" alt="Dolina — malowany pejzaż górski" width="1400" height="1029" loading="lazy"></button>
+        <figcaption><span class="no">Nr 16</span><i class="t">Dolina</i><span class="m">olej, płótno · 100×70 cm · 2023</span></figcaption>
+      </figure>
+    </div>
+    <p class="g-note">Każdy obraz powstaje ręcznie, w jednym egzemplarzu</p>
+  </div>
+</section>
+
+<section class="wall" aria-label="Na ścianie">
+  <img src="img/wnetrze-02.jpg" alt="Jasny salon z dużym obrazem strukturalnym na ścianie" width="1400" height="933" loading="lazy">
+  <div class="wall-in">
+    <p class="eyebrow">Na ścianie</p>
+    <q>Obraz nie wisi na ścianie. On ją zmienia.</q>
+    <cite>— Patrycja</cite>
+  </div>
+</section>
+
+<section class="process" id="proces">
+  <div class="wrap">
+    <div class="p-head">
+      <h2>Proces <i>twórczy</i></h2>
+      <p class="eyebrow"><b>03</b>Cztery kroki</p>
+    </div>
+
+    <article class="step">
+      <figure><img src="img/proces-01-plotno.jpg" alt="Czyste płótno na krośnie, początek pracy" width="1400" height="1050" loading="lazy"></figure>
+      <div class="txt"><span class="num" aria-hidden="true">01</span><h3>Płótno</h3><p>Zaczynam od czystego płótna i szkicu w głowie, rzadko na papierze.</p></div>
+    </article>
+    <article class="step">
+      <figure><img src="img/proces-02-szpachle.jpg" alt="Szpachle i pasta strukturalna" width="1400" height="933" loading="lazy"></figure>
+      <div class="txt"><span class="num" aria-hidden="true">02</span><h3>Narzędzia</h3><p>Szpachle, pędzle, pasta strukturalna. Każde narzędzie zostawia inny ślad.</p></div>
+    </article>
+    <article class="step">
+      <figure><img src="img/proces-03-farba.jpg" alt="Gruba warstwa farby nałożona szpachlą" width="1400" height="933" loading="lazy"></figure>
+      <div class="txt"><span class="num" aria-hidden="true">03</span><h3>Warstwy</h3><p>Nakładam farbę grubo, warstwa po warstwie. Część musi schnąć kilka dni.</p></div>
+    </article>
+    <article class="step">
+      <figure><img src="img/proces-04-sztaluga.jpg" alt="Obraz na sztaludze w bocznym świetle" width="1050" height="1400" loading="lazy"></figure>
+      <div class="txt"><span class="num" aria-hidden="true">04</span><h3>Światło</h3><p>Na końcu sprawdzam obraz w bocznym świetle — dopiero wtedy widać fakturę.</p></div>
+    </article>
+  </div>
+</section>
+
+<section class="contact" id="kontakt">
+  <div class="wrap">
+    <p class="eyebrow" style="color:var(--ochre);margin-bottom:1.6rem"><b>04</b>Kontakt</p>
+    <h2>Napisz<i>.</i></h2>
+    <div class="c-grid">
+      <div class="c-info">
+        <p class="lead">Chcesz zapytać o obraz albo zamówić pracę na wymiar? Napisz.</p>
+        <ul class="c-list">
+          <li><span>E-mail</span><b>kontakt@skart.pl</b></li>
+          <li><span>Instagram</span><b>@skart.art</b></li>
+        </ul>
+      </div>
+      <form id="form" novalidate>
+        <div class="f"><label for="f-n">Imię</label><input id="f-n" name="imie" type="text" autocomplete="name"></div>
+        <div class="f"><label for="f-e">E-mail</label><input id="f-e" name="email" type="email" autocomplete="email"></div>
+        <div class="f"><label for="f-m">Wiadomość</label><textarea id="f-m" name="wiadomosc"></textarea></div>
+        <button class="send" type="submit">Wyślij</button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+  <footer>
+    <span>© 2026 skart · Wszystkie obrazy malowane ręcznie</span>
+    <span>Zdjęcia w makiecie: Unsplash (zastępcze)</span>
+  </footer>
+</section>
+</main>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Podgląd pracy">
+  <button class="lb-btn lb-x" id="lb-x" type="button" aria-label="Zamknij">&times;</button>
+  <button class="lb-btn lb-p" id="lb-p" type="button" aria-label="Poprzednia praca">&larr;</button>
+  <button class="lb-btn lb-n" id="lb-n" type="button" aria-label="Następna praca">&rarr;</button>
+  <div class="lb-stage" id="lb-stage"><img id="lb-img" alt="" src=""></div>
+  <div class="lb-cap"><span class="no" id="lb-no" style="grid-row:auto"></span><span class="t" id="lb-t"></span><span class="m" id="lb-m"></span></div>
+</div>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* parallax napisu */
+  var mast=$('#mast'),tick=false;
+  function par(){tick=false;var y=window.scrollY||0;if(y<window.innerHeight*1.2)mast.style.setProperty('--px',(-y*0.07).toFixed(1)+'px')}
+  if(!reduce){window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(par)}},{passive:true})}
+
+  /* menu */
+  var bg=$('#burger'),ov=$('#overlay');
+  function menu(open){ov.classList.toggle('open',open);bg.setAttribute('aria-expanded',open);bg.setAttribute('aria-label',open?'Zamknij menu':'Otwórz menu');document.documentElement.style.overflow=open?'hidden':''}
+  bg.addEventListener('click',function(){menu(bg.getAttribute('aria-expanded')!=='true')});
+  $$('a',ov).forEach(function(a){a.addEventListener('click',function(){menu(false)})});
+  window.addEventListener('resize',function(){if(window.innerWidth>900)menu(false)});
+
+  /* filtr */
+  var works=$$('.work');
+  $$('.filters button').forEach(function(b){b.addEventListener('click',function(){
+    $$('.filters button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+    var f=b.getAttribute('data-f');
+    works.forEach(function(w){w.hidden=!(f==='all'||w.getAttribute('data-cat')===f)});
+  })});
+
+  /* lightbox */
+  var lb=$('#lb'),img=$('#lb-img'),cur=0,list=[],last=null;
+  function vis(){return works.filter(function(w){return !w.hidden})}
+  function show(i){
+    var n=list.length;cur=(i+n)%n;var w=list[cur],b=$('button.open',w);
+    img.src=b.getAttribute('data-src');img.alt=b.getAttribute('data-alt');
+    $('#lb-no').textContent=w.getAttribute('data-no');$('#lb-t').textContent=w.getAttribute('data-title');
+    $('#lb-m').textContent=w.getAttribute('data-tech')+' · '+w.getAttribute('data-dim')+' · '+w.getAttribute('data-year');
+  }
+  function openLb(w){list=vis();last=document.activeElement;lb.classList.add('open');document.documentElement.style.overflow='hidden';show(list.indexOf(w));$('#lb-x').focus()}
+  function closeLb(){lb.classList.remove('open');document.documentElement.style.overflow='';if(last&&last.focus)last.focus()}
+  works.forEach(function(w){$('button.open',w).addEventListener('click',function(){openLb(w)})});
+  $('#lb-x').addEventListener('click',closeLb);
+  $('#lb-p').addEventListener('click',function(){show(cur-1)});
+  $('#lb-n').addEventListener('click',function(){show(cur+1)});
+  lb.addEventListener('click',function(e){if(e.target===lb||e.target.id==='lb-stage')closeLb()});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){if(lb.classList.contains('open'))closeLb();else if(ov.classList.contains('open')){menu(false);bg.focus()}}
+    else if(lb.classList.contains('open')){if(e.key==='ArrowLeft')show(cur-1);else if(e.key==='ArrowRight')show(cur+1)}
+  });
+  var sx=null,sy=null;
+  lb.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  lb.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1))},{passive:true});
+
+  /* formularz makietowy */
+  $('#form').addEventListener('submit',function(e){e.preventDefault();$('#status').textContent='To makieta — formularz zacznie działać na prawdziwej stronie.'});
+})();
+</script>
+</body>
+</html>
