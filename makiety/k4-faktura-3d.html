@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>skart — obrazy malowane ręcznie (koncepcja 4: Faktura 3D)</title>
+<title>skart · Faktura 3D</title>
 <meta name="color-scheme" content="light">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +78,7 @@ nav.menu a:hover::after,nav.menu a.on::after{transform:scaleX(1)}
 .hero .logo .art{font-size:2.3em;letter-spacing:.04em}
 .hero .motto{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(19px,2.6vw,29px);line-height:1.45;margin:30px auto 0;max-width:620px;text-shadow:0 2px 14px rgba(0,0,0,.75),0 0 3px rgba(0,0,0,.5)}
 .hero .hint{position:absolute;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom));z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
-.hero .hint p{margin:0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+.hero .hint p{margin:0;padding-inline:16px;text-align:center;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,.8)}
 .dots{display:flex;gap:2px;pointer-events:auto}
 .dots button{width:44px;height:44px;background:none;border:0;cursor:pointer;display:grid;place-items:center;border-radius:50%}
 .dots button i{display:block;width:11px;height:11px;border-radius:50%;border:1.5px solid #fbf2e6;background:transparent;box-shadow:0 1px 6px rgba(0,0,0,.5);transition:background .3s,transform .3s}
@@ -181,6 +181,13 @@ footer a{font-size:13px;letter-spacing:.08em}
   *{transition:none!important}
   .mac img{transform:scale(1.4)}
 }
+
+/* strefa dotyku linku powrotu (iPhone) */
+a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px}
+
+/* żyroskop: przycisk widoczny tylko na urządzeniach z czujnikiem ruchu */
+.hero .tilt{pointer-events:auto;min-height:40px;padding:0 18px;border:1px solid rgba(251,242,230,.55);background:rgba(29,23,18,.35);color:#fbf2e6;font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);cursor:pointer}
+.hero .tilt[aria-pressed="true"]{background:rgba(251,242,230,.9);color:#1d1712}
 </style>
 </head>
 <body>
@@ -207,7 +214,8 @@ footer a{font-size:13px;letter-spacing:.08em}
     <p class="motto">Nie każda historia wymaga słów.<br>Niektóre znajdują swój wyraz w sztuce.</p>
   </div>
   <div class="hint">
-    <p>Przesuń palcem — zobacz fakturę</p>
+    <p id="hintTxt">Przesuń palcem — zobacz fakturę</p>
+    <button type="button" class="tilt" id="tiltBtn" hidden>Przechyl telefon</button>
     <div class="dots" role="group" aria-label="Zmień obraz w tle">
       <button type="button" data-i="0" aria-current="true" aria-label="Len — biały relief"><i></i></button>
       <button type="button" data-i="1" aria-label="Ochra"><i></i></button>
@@ -222,7 +230,7 @@ footer a{font-size:13px;letter-spacing:.08em}
     <div class="pic"><img src="img/proces-05-pracownia.jpg" alt="Pracownia malarki — płótna i narzędzia w jasnym świetle" loading="lazy"></div>
     <div>
       <p class="eyebrow">O mnie</p>
-      <h2>Obrazy, które chce się dotknąć</h2>
+      <h2>Farba, która rzuca cień</h2>
       <p class="lead">Maluję obrazy, które chce się dotknąć.</p>
       <p>Pracuję szpachlą i pędzlem, warstwa po warstwie, aż farba zacznie rzucać własny cień. Tworzę obrazy strukturalne i klasyczne płótna — pejzaże, abstrakcje, światło. Każdy powstaje ręcznie, w jednym egzemplarzu.</p>
       <div class="sign">— Patrycja</div>
@@ -516,6 +524,27 @@ function initGL(){
   hero.addEventListener('pointerdown',function(e){setTarget(e.clientX,e.clientY)},{passive:true});
   window.addEventListener('touchmove',function(e){if(e.touches[0]&&visible)setTarget(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
   hero.addEventListener('touchstart',function(e){if(e.touches[0])setTarget(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
+
+  /* żyroskop (iPhone pyta o zgodę po dotknięciu przycisku) */
+  var tiltBtn=document.getElementById('tiltBtn'),hintTxt=document.getElementById('hintTxt'),tiltOn=false,beta0=null;
+  function onTilt(e){
+    if(e.gamma==null||e.beta==null)return;
+    if(beta0===null)beta0=e.beta;
+    var nx=Math.max(-1.1,Math.min(1.1,e.gamma/28)),ny=Math.max(-1.1,Math.min(1.1,(beta0-e.beta)/22));
+    target.set(nx*aspect,ny,.55);lastMove=performance.now();
+  }
+  function startTilt(){tiltOn=true;beta0=null;window.addEventListener('deviceorientation',onTilt);tiltBtn.setAttribute('aria-pressed','true');tiltBtn.textContent='Ruch włączony';if(hintTxt)hintTxt.textContent='Przechylaj telefon'}
+  if(window.DeviceOrientationEvent&&('ontouchstart' in window||navigator.maxTouchPoints>0)){
+    tiltBtn.hidden=false;
+    tiltBtn.addEventListener('click',function(){
+      if(tiltOn){tiltOn=false;window.removeEventListener('deviceorientation',onTilt);tiltBtn.setAttribute('aria-pressed','false');tiltBtn.textContent='Przechyl telefon';if(hintTxt)hintTxt.textContent='Przesuń palcem — zobacz fakturę';return}
+      var rp=window.DeviceOrientationEvent.requestPermission;
+      var iOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+      if(iOS&&typeof rp==='function'){
+        rp.call(window.DeviceOrientationEvent).then(function(st){if(st==='granted')startTilt();else{tiltBtn.textContent='Brak zgody na ruch';}}).catch(function(){tiltBtn.textContent='Ruch niedostępny'});
+      }else{startTilt()}
+    });
+  }
 
   var visible=true,running=false,raf=0,prev=performance.now();
   function frame(now){

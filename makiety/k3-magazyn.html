@@ -10,7 +10,7 @@
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>skart — Magazyn</title>
+<title>skart · Magazyn</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,600&family=Manrope:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
@@ -113,7 +113,8 @@ section[id]{scroll-margin-top:var(--bar)}
 /* ===== na scianie ===== */
 .wall{position:relative;min-height:min(92svh,860px);overflow:hidden;color:var(--ivory);display:flex;align-items:flex-end;background:var(--umbra)}
 .wall>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.wall::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(42,28,20,.82) 0%,rgba(42,28,20,.15) 62%,rgba(42,28,20,0) 100%)}
+.wall::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(42,28,20,.92) 0%,rgba(42,28,20,.7) 38%,rgba(42,28,20,.25) 70%,rgba(42,28,20,0) 100%)}
+.wall q{text-shadow:0 2px 18px rgba(20,12,8,.55)}
 .wall-in{position:relative;padding:6rem max(var(--gut),3vw) clamp(2.5rem,6vw,5rem);max-width:1180px}
 .wall .eyebrow{color:var(--ochre);margin-bottom:1.2rem}
 .wall q{display:block;quotes:none;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(2.1rem,5.6vw,5.4rem);line-height:1.08;letter-spacing:-.015em}
@@ -204,6 +205,9 @@ footer{margin-top:clamp(3.5rem,8vw,7rem);border-top:1px solid rgba(243,235,221,.
   *{transition:none!important;animation:none!important}
   .mast{transform:none!important}
 }
+
+/* strefa dotyku linku powrotu (iPhone) */
+a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px}
 </style>
 </head>
 <body>
@@ -273,37 +277,37 @@ footer{margin-top:clamp(3.5rem,8vw,7rem);border-top:1px solid rgba(243,235,221,.
       </div>
     </div>
     <div class="spread" id="spread">
-      <figure class="work" data-cat="struk" data-no="Nr 07" data-title="Brzeg" data-tech="akryl, pasta strukturalna" data-dim="120×80 cm" data-year="2025" style="--c:span 8;--mt:0">
+      <figure class="work" data-cat="struk" data-no="Nr 01" data-title="Brzeg" data-tech="akryl, pasta strukturalna" data-dim="120×80 cm" data-year="2025" style="--c:span 8;--mt:0">
         <button class="open" type="button" data-src="img/praca-07.jpg" data-alt="Obraz strukturalny z falistym reliefem farby" aria-label="Powiększ: Brzeg"><img src="img/praca-07.jpg" alt="Obraz strukturalny z falistym reliefem farby" width="1400" height="933" loading="lazy"></button>
-        <figcaption><span class="no">Nr 07</span><i class="t">Brzeg</i><span class="m">akryl, pasta strukturalna · 120×80 cm · 2025</span></figcaption>
+        <figcaption><span class="no">Nr 01</span><i class="t">Brzeg</i><span class="m">akryl, pasta strukturalna · 120×80 cm · 2025</span></figcaption>
       </figure>
       <figure class="work" data-cat="struk" data-no="Nr 02" data-title="Szron" data-tech="akryl, szpachla, płótno" data-dim="60×80 cm" data-year="2025" style="--c:span 4;--mt:11vw">
         <button class="open" type="button" data-src="img/praca-02.jpg" data-alt="Szron — biało-szare warstwy szpachli na płótnie" aria-label="Powiększ: Szron"><img src="img/praca-02.jpg" alt="Szron — biało-szare warstwy szpachli na płótnie" width="1050" height="1400" loading="lazy"></button>
         <figcaption><span class="no">Nr 02</span><i class="t">Szron</i><span class="m">akryl, szpachla, płótno · 60×80 cm · 2025</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 01" data-title="Szum" data-tech="akryl, pasta strukturalna, płótno" data-dim="80×80 cm" data-year="2025" style="--c:span 5;--mt:0">
+      <figure class="work" data-cat="struk" data-no="Nr 03" data-title="Szum" data-tech="akryl, pasta strukturalna, płótno" data-dim="80×80 cm" data-year="2025" style="--c:span 5;--mt:0">
         <button class="open" type="button" data-src="img/praca-01.jpg" data-alt="Szum — kwadratowy obraz z gęstą fakturą pasty" aria-label="Powiększ: Szum"><img src="img/praca-01.jpg" alt="Szum — kwadratowy obraz z gęstą fakturą pasty" width="1400" height="1391" loading="lazy"></button>
-        <figcaption><span class="no">Nr 01</span><i class="t">Szum</i><span class="m">akryl, pasta strukturalna, płótno · 80×80 cm · 2025</span></figcaption>
+        <figcaption><span class="no">Nr 03</span><i class="t">Szum</i><span class="m">akryl, pasta strukturalna, płótno · 80×80 cm · 2025</span></figcaption>
       </figure>
-      <figure class="work" data-cat="mal" data-no="Nr 03" data-title="Zapiski" data-tech="olej, płótno" data-dim="50×70 cm" data-year="2024" style="--c:span 4;--mt:6vw">
+      <figure class="work" data-cat="mal" data-no="Nr 04" data-title="Zapiski" data-tech="olej, płótno" data-dim="50×70 cm" data-year="2024" style="--c:span 4;--mt:6vw">
         <button class="open" type="button" data-src="img/praca-03.jpg" data-alt="Zapiski — olejny obraz w pionie" aria-label="Powiększ: Zapiski"><img src="img/praca-03.jpg" alt="Zapiski — olejny obraz w pionie" width="931" height="1400" loading="lazy"></button>
-        <figcaption><span class="no">Nr 03</span><i class="t">Zapiski</i><span class="m">olej, płótno · 50×70 cm · 2024</span></figcaption>
+        <figcaption><span class="no">Nr 04</span><i class="t">Zapiski</i><span class="m">olej, płótno · 50×70 cm · 2024</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 11" data-title="Pastel" data-tech="pasta strukturalna, akryl" data-dim="40×60 cm" data-year="2025" style="--c:span 3;--mt:14vw">
+      <figure class="work" data-cat="struk" data-no="Nr 05" data-title="Pastel" data-tech="pasta strukturalna, akryl" data-dim="40×60 cm" data-year="2025" style="--c:span 3;--mt:14vw">
         <button class="open" type="button" data-src="img/praca-11.jpg" data-alt="Pastel — jasny obraz strukturalny" aria-label="Powiększ: Pastel"><img src="img/praca-11.jpg" alt="Pastel — jasny obraz strukturalny" width="933" height="1400" loading="lazy"></button>
-        <figcaption><span class="no">Nr 11</span><i class="t">Pastel</i><span class="m">pasta strukturalna, akryl · 40×60 cm · 2025</span></figcaption>
+        <figcaption><span class="no">Nr 05</span><i class="t">Pastel</i><span class="m">pasta strukturalna, akryl · 40×60 cm · 2025</span></figcaption>
       </figure>
-      <figure class="work" data-cat="mal" data-no="Nr 15" data-title="Jezioro pod szczytem" data-tech="olej, płótno" data-dim="100×70 cm" data-year="2023" style="--c:span 6;--mt:0">
+      <figure class="work" data-cat="mal" data-no="Nr 06" data-title="Jezioro pod szczytem" data-tech="olej, płótno" data-dim="100×70 cm" data-year="2023" style="--c:span 6;--mt:0">
         <button class="open" type="button" data-src="img/gory-01.jpg" data-alt="Jezioro pod szczytem — malowany pejzaż górski" aria-label="Powiększ: Jezioro pod szczytem"><img src="img/gory-01.jpg" alt="Jezioro pod szczytem — malowany pejzaż górski" width="1400" height="924" loading="lazy"></button>
-        <figcaption><span class="no">Nr 15</span><i class="t">Jezioro pod szczytem</i><span class="m">olej, płótno · 100×70 cm · 2023</span></figcaption>
+        <figcaption><span class="no">Nr 06</span><i class="t">Jezioro pod szczytem</i><span class="m">olej, płótno · 100×70 cm · 2023</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 13" data-title="Biel" data-tech="gips akrylowy, relief" data-dim="50×90 cm" data-year="2025" style="--c:span 3;--mt:8vw">
+      <figure class="work" data-cat="struk" data-no="Nr 07" data-title="Biel" data-tech="gips akrylowy, relief" data-dim="50×90 cm" data-year="2025" style="--c:span 3;--mt:8vw">
         <button class="open" type="button" data-src="img/praca-13.jpg" data-alt="Biel — biały relief z gipsu akrylowego" aria-label="Powiększ: Biel"><img src="img/praca-13.jpg" alt="Biel — biały relief z gipsu akrylowego" width="787" height="1400" loading="lazy"></button>
-        <figcaption><span class="no">Nr 13</span><i class="t">Biel</i><span class="m">gips akrylowy, relief · 50×90 cm · 2025</span></figcaption>
+        <figcaption><span class="no">Nr 07</span><i class="t">Biel</i><span class="m">gips akrylowy, relief · 50×90 cm · 2025</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 04" data-title="Len" data-tech="pasta strukturalna, akryl" data-dim="60×90 cm" data-year="2025" style="--c:span 3;--mt:0">
+      <figure class="work" data-cat="struk" data-no="Nr 08" data-title="Len" data-tech="pasta strukturalna, akryl" data-dim="60×90 cm" data-year="2025" style="--c:span 3;--mt:0">
         <button class="open" type="button" data-src="img/praca-04.jpg" data-alt="Len — faktura przypominająca tkaninę" aria-label="Powiększ: Len"><img src="img/praca-04.jpg" alt="Len — faktura przypominająca tkaninę" width="933" height="1400" loading="lazy"></button>
-        <figcaption><span class="no">Nr 04</span><i class="t">Len</i><span class="m">pasta strukturalna, akryl · 60×90 cm · 2025</span></figcaption>
+        <figcaption><span class="no">Nr 08</span><i class="t">Len</i><span class="m">pasta strukturalna, akryl · 60×90 cm · 2025</span></figcaption>
       </figure>
       <figure class="work" data-cat="struk" data-no="Nr 09" data-title="Jesień w glinie" data-tech="olej, szpachla" data-dim="80×60 cm" data-year="2024" style="--c:span 5;--mt:0">
         <button class="open" type="button" data-src="img/praca-09.jpg" data-alt="Jesień w glinie — obraz w tonach ziemi" aria-label="Powiększ: Jesień w glinie"><img src="img/praca-09.jpg" alt="Jesień w glinie — obraz w tonach ziemi" width="1400" height="1050" loading="lazy"></button>
@@ -313,21 +317,21 @@ footer{margin-top:clamp(3.5rem,8vw,7rem);border-top:1px solid rgba(243,235,221,.
         <button class="open" type="button" data-src="img/praca-10.jpg" data-alt="Ochra — obraz w ciepłych tonach ochry" aria-label="Powiększ: Ochra"><img src="img/praca-10.jpg" alt="Ochra — obraz w ciepłych tonach ochry" width="1400" height="1050" loading="lazy"></button>
         <figcaption><span class="no">Nr 10</span><i class="t">Ochra</i><span class="m">olej, szpachla · 80×60 cm · 2024</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 06" data-title="Odwilż" data-tech="akryl, szpachla" data-dim="100×80 cm" data-year="2025" style="--c:span 5;--mt:0">
+      <figure class="work" data-cat="struk" data-no="Nr 11" data-title="Odwilż" data-tech="akryl, szpachla" data-dim="100×80 cm" data-year="2025" style="--c:span 5;--mt:0">
         <button class="open" type="button" data-src="img/praca-06.jpg" data-alt="Odwilż — warstwy szpachli w chłodnych odcieniach" aria-label="Powiększ: Odwilż"><img src="img/praca-06.jpg" alt="Odwilż — warstwy szpachli w chłodnych odcieniach" width="1400" height="1077" loading="lazy"></button>
-        <figcaption><span class="no">Nr 06</span><i class="t">Odwilż</i><span class="m">akryl, szpachla · 100×80 cm · 2025</span></figcaption>
+        <figcaption><span class="no">Nr 11</span><i class="t">Odwilż</i><span class="m">akryl, szpachla · 100×80 cm · 2025</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 05" data-title="Krata" data-tech="technika mieszana" data-dim="70×100 cm" data-year="2024" style="--c:span 3;--mt:7vw">
+      <figure class="work" data-cat="struk" data-no="Nr 12" data-title="Krata" data-tech="technika mieszana" data-dim="70×100 cm" data-year="2024" style="--c:span 3;--mt:7vw">
         <button class="open" type="button" data-src="img/praca-05.jpg" data-alt="Krata — technika mieszana, kratowy układ" aria-label="Powiększ: Krata"><img src="img/praca-05.jpg" alt="Krata — technika mieszana, kratowy układ" width="1025" height="1400" loading="lazy"></button>
-        <figcaption><span class="no">Nr 05</span><i class="t">Krata</i><span class="m">technika mieszana · 70×100 cm · 2024</span></figcaption>
+        <figcaption><span class="no">Nr 12</span><i class="t">Krata</i><span class="m">technika mieszana · 70×100 cm · 2024</span></figcaption>
       </figure>
-      <figure class="work" data-cat="struk" data-no="Nr 14" data-title="Żar" data-tech="olej, szpachla" data-dim="90×60 cm" data-year="2024" style="--c:span 4;--mt:3vw">
+      <figure class="work" data-cat="struk" data-no="Nr 13" data-title="Żar" data-tech="olej, szpachla" data-dim="90×60 cm" data-year="2024" style="--c:span 4;--mt:3vw">
         <button class="open" type="button" data-src="img/praca-14.jpg" data-alt="Żar — obraz w czerwieniach i brązach" aria-label="Powiększ: Żar"><img src="img/praca-14.jpg" alt="Żar — obraz w czerwieniach i brązach" width="1400" height="933" loading="lazy"></button>
-        <figcaption><span class="no">Nr 14</span><i class="t">Żar</i><span class="m">olej, szpachla · 90×60 cm · 2024</span></figcaption>
+        <figcaption><span class="no">Nr 13</span><i class="t">Żar</i><span class="m">olej, szpachla · 90×60 cm · 2024</span></figcaption>
       </figure>
-      <figure class="work" data-cat="mal" data-no="Nr 16" data-title="Dolina" data-tech="olej, płótno" data-dim="100×70 cm" data-year="2023" style="--c:span 8;--mt:0">
+      <figure class="work" data-cat="mal" data-no="Nr 14" data-title="Dolina" data-tech="olej, płótno" data-dim="100×70 cm" data-year="2023" style="--c:span 8;--mt:0">
         <button class="open" type="button" data-src="img/gory-02.jpg" data-alt="Dolina — malowany pejzaż górski" aria-label="Powiększ: Dolina"><img src="img/gory-02.jpg" alt="Dolina — malowany pejzaż górski" width="1400" height="1029" loading="lazy"></button>
-        <figcaption><span class="no">Nr 16</span><i class="t">Dolina</i><span class="m">olej, płótno · 100×70 cm · 2023</span></figcaption>
+        <figcaption><span class="no">Nr 14</span><i class="t">Dolina</i><span class="m">olej, płótno · 100×70 cm · 2023</span></figcaption>
       </figure>
     </div>
     <p class="g-note">Każdy obraz powstaje ręcznie, w jednym egzemplarzu</p>
@@ -401,7 +405,7 @@ footer{margin-top:clamp(3.5rem,8vw,7rem);border-top:1px solid rgba(243,235,221,.
   <button class="lb-btn lb-x" id="lb-x" type="button" aria-label="Zamknij">&times;</button>
   <button class="lb-btn lb-p" id="lb-p" type="button" aria-label="Poprzednia praca">&larr;</button>
   <button class="lb-btn lb-n" id="lb-n" type="button" aria-label="Następna praca">&rarr;</button>
-  <div class="lb-stage" id="lb-stage"><img id="lb-img" alt="" src=""></div>
+  <div class="lb-stage" id="lb-stage"><img id="lb-img" alt=""></div>
   <div class="lb-cap"><span class="no" id="lb-no" style="grid-row:auto"></span><span class="t" id="lb-t"></span><span class="m" id="lb-m"></span></div>
 </div>
 

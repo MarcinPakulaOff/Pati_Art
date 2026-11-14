@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>skart — obrazy malowane ręcznie (koncepcja 1: Klasyczna)</title>
+<title>skart · Klasyczna</title>
 <meta name="color-scheme" content="light">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -218,6 +218,9 @@ footer small{display:block;opacity:.65;font-size:12px;margin-top:4px}
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none !important;animation:none !important}
 }
+
+/* strefa dotyku linku powrotu (iPhone) */
+a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px}
 </style>
 </head>
 <body>
@@ -356,7 +359,7 @@ footer small{display:block;opacity:.65;font-size:12px;margin-top:4px}
   <button class="x" type="button" aria-label="Zamknij">×</button>
   <button class="pv" type="button" aria-label="Poprzednia praca">‹</button>
   <button class="nx" type="button" aria-label="Następna praca">›</button>
-  <figure><img id="lb-img" src="" alt=""><figcaption id="lb-cap"></figcaption></figure>
+  <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
 </div>
 
 <script>

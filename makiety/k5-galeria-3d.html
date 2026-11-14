@@ -9,7 +9,7 @@ Przewijając stronę, idziesz jasnym korytarzem galerii: 14 obrazów Pati wisi n
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>skart — Wirtualna galeria</title>
+<title>skart · Wirtualna galeria</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400&family=Pinyon+Script&display=swap" rel="stylesheet">
@@ -170,6 +170,9 @@ footer a:hover{color:var(--ochre-ink)}
   html{scroll-behavior:auto}
   *{transition:none!important}
 }
+
+/* strefa dotyku linku powrotu (iPhone) */
+a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px}
 </style>
 </head>
 <body>
@@ -598,7 +601,7 @@ function resize(){
   renderer.setSize(w,h,false);
   camera.aspect=w/h;
   narrow=camera.aspect<.85;DSTOP=narrow?1.6:2.0;buildStops();readScroll();
-  camera.fov=narrow?58:58;
+  camera.fov=narrow?46:58;
   camera.updateProjectionMatrix();need();
 }
 if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
