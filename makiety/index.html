@@ -1,5 +1,10 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
 <title>Makiety skart</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap">
@@ -20,12 +25,15 @@
     color-scheme: light;
   }
   html { background: var(--wall); }
+  * { box-sizing: border-box; }
   body {
     background: var(--wall); color: var(--ink);
     font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.6;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 0 48px;
+    margin: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
   }
   .wrap { max-width: 1120px; margin: 0 auto; }
 
@@ -88,7 +96,8 @@
   footer p { margin: 0 0 6px; }
   @media (prefers-reduced-motion: reduce) { .shot { transition: none; } .concept:hover .shot { transform: none; } }
 </style>
-
+</head>
+<body>
 <div class="wrap">
   <header class="top">
     <div class="logo" aria-label="skart"><span class="sk">sk</span><span class="art">ART</span></div>
@@ -146,3 +155,5 @@
     <p>Zdjęcia zastępcze: Unsplash.</p>
   </footer>
 </div>
+</body>
+</html>
